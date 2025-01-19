@@ -1,0 +1,2 @@
+INSERT INTO `tevento`(`nomeEvento`, `categoria`, `pathFotoLocandina`, `idLuogo`) VALUES ('','','','','','')
+INSERT INTO `tluogo`(`citta`, `stato`, `locazione`) VALUES ('','','','')
