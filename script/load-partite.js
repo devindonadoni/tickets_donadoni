@@ -2,7 +2,7 @@
 let swiper_partite;
 
 function loadPosts() {
-    fetch('php/partite-query.php')
+    fetch('php/category-query.php?categoria=partite')
         .then(response => response.json())
         .then(posts => {
             let output = '';

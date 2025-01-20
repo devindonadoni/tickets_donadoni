@@ -486,6 +486,7 @@ nav .fa {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 20px;
     margin: 0 3rem;
+    margin-bottom: 1rem;
     width: 250px;
     height: 350px;
     position: relative;
@@ -837,4 +838,14 @@ nav .fa {
     text-align: center;      
     font-size: 20px;         
     color: #ff0000;         
+}
+
+
+.card-orientation{
+    display: flex;
+    flex-wrap: wrap; /* Permette di andare a capo */
+    justify-content: center; /* Allinea gli elementi a sinistra */
+    gap: 10px;
+    width: 100%; /* Occupa tutta la larghezza disponibile */
+    box-sizing: border-box; /* Include padding nel calcolo della larghezza */
 }

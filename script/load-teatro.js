@@ -1,7 +1,7 @@
 let swiper_teatro;
 
 function loadPosts() {
-    fetch('php/teatro-query.php')
+    fetch('php/category-query.php?categoria=teatro')
         .then(response => response.json())
         .then(posts => {
             let output = '';

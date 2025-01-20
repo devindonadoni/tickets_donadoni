@@ -32,7 +32,7 @@ $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
                     <ul>
                         <li><a href="#filtri-container" id="scrollToFilters"><i
                                     class="fa-solid fa-magnifying-glass"></i></a></li>
-                        <li><a href="preferiti.php"><i class="fa-solid fa-heart"></i></a></li>
+                        <li><a href="cart.php"><i class="fa-solid fa-heart"></i></a></li>
                         <li><a href="profilo.php"><i class="fa-solid fa-user"></i></a></li>
                     </ul>
                 </div>
@@ -84,28 +84,28 @@ $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
         <h1 class="label">Categorie:</h1>
         <div class="category">
             <div class="single-category">
-                <a href="partite-category.php">
+                <a href="category-view.php?categoria=partite">
                     <h2>Sport e Partite</h2>
                     <img src="images/stadium.png" alt="Stadium image">
                     <div class="gradient-overlay"></div>
                 </a>
             </div>
             <div class="single-category">
-                <a href="teatro-category.php">
+                <a href="category-view.php?categoria=teatro">
                     <h2>Teatro</h2>
                     <img src="images/theatre.png" alt="Theatre image">
                     <div class="gradient-overlay"></div>
                 </a>
             </div>
             <div class="single-category">
-                <a href="tour-category.php">
+                <a href="category-view.php?categoria=tour">
                     <h2>Tour</h2>
                     <img src="images/tour.png" alt="Tour image">
                     <div class="gradient-overlay"></div>
                 </a>
             </div>
             <div class="single-category">
-                <a href="concerti-category.php">
+                <a href="category-view.php?categoria=partite">
                     <h2>Concerti</h2>
                     <img src="images/concerto-categ.png" alt="Concerts image">
                     <div class="gradient-overlay"></div>
@@ -124,11 +124,11 @@ $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
             <div class="categoria">
                 <h1>Categoria</h1>
                 <select id="categoria-select" class="select-filter">
-                    <option value="" disabled selected>Scegli la categoria...</option>
-                    <option value="concerti">Concerti</option>
-                    <option value="sport">Sport</option>
-                    <option value="teatro">Teatro</option>
-                    <option value="cinema">Cinema</option>
+                    <option value="">Scegli la categoria...</option>
+                    <option value="concerto">Concerto</option>
+                    <option value="partite">partite</option>
+                    <option value="teatro">teatro</option>
+                    <option value="tour">tour</option>
                 </select>
             </div>
             <div class="luogo">
@@ -137,7 +137,7 @@ $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
                 <select id="citta-select" class="select-filter">
                     <option value="" disablected>Scegli la citta'...</option>
                     <?php
-                    $queryCitta = "SELECT DISTINCT citta FROM tluogo";
+                    $queryCitta = "SELECT DISTINCT citta FROM tluogo ORDER BY citta ASC";
                     $result = mysqli_query($db_remoto, $queryCitta);
 
                     if ($result && $result->num_rows > 0) {
@@ -152,6 +152,8 @@ $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
                 <h1>Data</h1>
                 <input type="date" id="data-select" class="input-date">
             </div>
+
+            
         </div>
 
 
@@ -170,7 +172,7 @@ $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
 
 
         <!-- concerti -->
-        <a href="concerti-catogry.php">
+        <a href="category-view.php?categoria=concerto">
             <h1 class="label">Concerti:</h1>
         </a>
         <div class="concerti-container swiper">
@@ -185,7 +187,7 @@ $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
 
 
         <!-- partite -->
-        <a href="partite-catogry.php">
+        <a href="category-view.php?categoria=partite">
             <h1 class="label">Partite:</h1>
         </a>
         <div class="partite-container swiper">
@@ -200,7 +202,7 @@ $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
 
 
         <!-- tour -->
-        <a href="tour-catogry.php">
+        <a href="category-view.php?categoria=tour">
             <h1 class="label">Tour:</h1>
         </a>
         <div class="tour-container swiper">
@@ -215,7 +217,7 @@ $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
 
 
         <!-- teatro -->
-        <a href="teatro-catogry.php">
+        <a href="category-view.php?categoria=teatro">
             <h1 class="label">teatro:</h1>
         </a>
         <div class="teatro-container swiper">
@@ -228,12 +230,7 @@ $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
             <div class="result-pagination swiper-pagination"></div>
         </div>
 
-        <!-- <h1>Ajax Live Data Search</h1>
-        <input type="text" id="search-box" placeholder="Search...">
-        <div id="results">
-            
-        </div> -->
-        <!--         
+        
         <div class="pay">
             <div class="method-payment">
                 <img src="images/cartadeocente.png" alt="">
@@ -244,7 +241,7 @@ $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
             </div>
         </div>
 
-        Wrapper esterno per il footer
+        <!-- Wrapper esterno per il footer -->
         <div class="footer-wrapper">
             <footer class="footer">
                 <div class="footer-decor-top">
@@ -288,7 +285,7 @@ $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
                     <div class="circle"></div>
                 </div>
             </footer>
-    </div> -->
+    </div>
 
     </div>
 
@@ -335,34 +332,53 @@ $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
         spaceBetween: 10,
     });
 
-    $("#search-box").on("keyup", function () {
-        let query = $(this).val();
-        if (query.length > 0) {
-            $.ajax({
-                url: "php/search.php",
-                method: "POST",
-                data: { query: query },
-                success: function (data) {
-                    if (data.trim().length > 0) {
-                        $("#result").html(data); // Inserisci i risultati
-                        $("#results-section").fadeIn(); // Mostra la sezione dei risultati
-                    } else {
-                        $("#result").html(""); // Nessun risultato
-                        $("#results-section").fadeOut(); // Nascondi la sezione
-                    }
-                    swiper.update(); // Aggiorna Swiper per rilevare i nuovi elementi
-                },
-                error: function () {
-                    console.error("Errore durante la richiesta AJAX.");
-                }
-            });
-        } else {
-            $("#result").html(""); // Svuota i risultati se il campo è vuoto
-            $("#results-section").fadeOut(); // Nascondi la sezione
-            swiper.update(); // Aggiorna Swiper
+    $("#search-box, #categoria-select, #citta-select, #data-select").on("input change", function () {
+        let query = $("#search-box").val().trim();
+        let categoria = $("#categoria-select").val();
+        let citta = $("#citta-select").val();
+        let data = $("#data-select").val();
+
+        // Controlla se sono selezionate le opzioni predefinite
+        let noFiltersActive =
+            query === "" &&
+            (categoria === "Scegli categoria" || categoria === "") &&
+            (citta === "Scegli città" || citta === "") &&
+            (data === "");
+
+        if (noFiltersActive) {
+            // Nascondi la sezione dei risultati
+            $("#result").html("");
+            $("#results-section").fadeOut();
+            return;
         }
+
+        $.ajax({
+            url: "php/search.php",
+            method: "POST",
+            data: {
+                query: query,
+                categoria: categoria,
+                citta: citta,
+                data: data
+            },
+            success: function (data) {
+                if (data.trim().length > 0) {
+                    $("#result").html(data); // Inserisci i risultati
+                    $("#results-section").fadeIn(); // Mostra la sezione dei risultati
+                } else {
+                    $("#result").html(""); // Nessun risultato
+                    $("#results-section").fadeOut(); // Nascondi la sezione
+                }
+                swiper.update(); // Aggiorna Swiper per rilevare i nuovi elementi
+            },
+            error: function () {
+                console.error("Errore durante la richiesta AJAX.");
+            }
+        });
     });
 });
+
+
 
 
 </script>

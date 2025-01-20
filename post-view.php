@@ -77,7 +77,7 @@ $result = mysqli_query($db_remoto, $sql);
                             echo '<img src="'.$row['pathFotoLocandina'].'" alt="'.$row['nomeEvento'].'" class="event-image">';
                             echo '<div id="event-info" class="event-info">';
 
-                            echo '<a href="' . $row['categoria'] . '-section.php">' . $categoria . '</a>';
+                            echo '<a href="category-view.php?categoria='.$row['categoria'].'">'. $categoria . '</a>';
                             echo '<h1>' . $row['nomeEvento'] . '</h1>';
                             echo '<div class="info-location">';
                             echo '<div class="where">';

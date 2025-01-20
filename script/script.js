@@ -1,4 +1,3 @@
-// Swiper per '.image-container' con swipe manuale ogni 5 secondi
 const swiper1 = new Swiper('.image-container', {
   loop: true,
   spaceBetween: 40,

@@ -1,7 +1,7 @@
 let swiper_tour;
 
 function loadPosts() {
-    fetch('php/tour-query.php')
+    fetch('php/category-query.php?categoria=tour')
         .then(response => response.json())
         .then(posts => {
             let output = '';

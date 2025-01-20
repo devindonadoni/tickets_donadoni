@@ -29,7 +29,7 @@ function loadPosts() {
                 `;
             });
 
-            document.getElementById('slide-concerti').innerHTML = output;
+            document.getElementById('slide-concerto').innerHTML = output;
 
             // Aggiorna lo slider Swiper
             if (swiper) {

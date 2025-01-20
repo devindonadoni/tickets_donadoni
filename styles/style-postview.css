@@ -321,14 +321,21 @@ input[type="radio"]:hover {
 
 .checkout-button {
     background-color: #4680EB;
-    width: 30%;
+    width: 50%; /* Aumenta la larghezza del bottone */
     border-radius: 30px;
     margin: 1rem;
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 100px;
+    gap: 20px; /* Riduci il gap */
     padding: 0.2rem 2rem;
+}
+
+
+.checkout-button:hover{ 
+    transform: scale(4);
+    background-color: #043ca4;
+    box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.1);
 }
 
 .checkout-button p {
