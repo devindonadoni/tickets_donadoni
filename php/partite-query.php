@@ -14,7 +14,7 @@ JOIN
 ON 
     e.idLuogo = l.idLuogo
 WHERE 
-    e.categoria = 'partite'";
+    e.categoria = 'concerto'";
 
 $result = mysqli_query($db_remoto, $sql);
 

@@ -1,11 +1,15 @@
 let swiper;
 
 function loadPosts() {
-    fetch('php/concerti-query.php')
+    fetch('php/category-query.php?categoria=concerto')
         .then(response => response.json())
         .then(posts => {
             let output = '';
             posts.forEach(post => {
+                console.log(posts.nomeEvento);
+                console.log(posts.citta);
+                console.log(posts.nomeEvento);
+
                 const date = new Date(post.dataOraEvento);
                 const day = String(date.getDate()).padStart(2, '0');
                 const month = date.toLocaleString('default', { month: 'long' }).toUpperCase();

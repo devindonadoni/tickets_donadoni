@@ -136,14 +136,7 @@ $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
                 </div>
             </footer>
         </div>
-
     </div>
-
-    <script src="script/script.js"></script>
-    <script src="script/load-concerti.js"></script>
-    <script src="script/load-partite.js"></script>
-    <script src="script/load-tour.js"></script>
-    <script src="script/load-teatro.js"></script>
 </body>
 
 <script>

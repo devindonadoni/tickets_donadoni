@@ -1,5 +1,10 @@
 <?php
-$db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
+    $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
+    session_start();
+$utente = "";
+if (isset($_SESSION['user'])) {
+    $utente = $_SESSION['user'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,7 +38,13 @@ $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
                         <li><a href="#filtri-container" id="scrollToFilters"><i
                                     class="fa-solid fa-magnifying-glass"></i></a></li>
                         <li><a href="cart.php"><i class="fa-solid fa-heart"></i></a></li>
-                        <li><a href="profilo.php"><i class="fa-solid fa-user"></i></a></li>
+                        <?php
+                        if ($utente != "") {
+                            echo '<li><a href="profilo.php"><i class="fa-solid fa-user"></i></a></li>';
+                        } else {
+                            echo '<li><a href="login.php"><i class="fa-solid fa-user"></i></a></li>';
+                        }
+                        ?>
                     </ul>
                 </div>
                 <i class="fa fa-bars" onclick="showMenu()"></i>
@@ -170,22 +181,6 @@ $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
             </div>
         </div>
 
-
-        <!-- concerti -->
-        <a href="category-view.php?categoria=concerto">
-            <h1 class="label">Concerti:</h1>
-        </a>
-        <div class="concerti-container swiper">
-            <div id="slide-concerti" class="swiper-wrapper">
-            </div>
-            <div class="result-next swiper-button-next"></div>
-            <div class="result-prev swiper-button-prev"></div>
-
-            <!-- Swiper Pagination -->
-            <div class="result-pagination swiper-pagination"></div>
-        </div>
-
-
         <!-- partite -->
         <a href="category-view.php?categoria=partite">
             <h1 class="label">Partite:</h1>
@@ -199,7 +194,20 @@ $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
             <!-- Swiper Pagination -->
             <div class="result-pagination swiper-pagination"></div>
         </div>
+                    
+        <!-- concerti -->
+        <a href="category-view.php?categoria=concerto">
+            <h1 class="label">Concerti:</h1>
+        </a>
+        <div class="concerti-container swiper">
+            <div id="slide-concerto" class="swiper-wrapper">
+            </div>
+            <div class="result-next swiper-button-next"></div>
+            <div class="result-prev swiper-button-prev"></div>
 
+            <!-- Swiper Pagination -->
+            <div class="result-pagination swiper-pagination"></div>
+        </div>
 
         <!-- tour -->
         <a href="category-view.php?categoria=tour">
