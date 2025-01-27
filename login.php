@@ -1,13 +1,15 @@
 <?php
-$db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
+session_start();
 
+$db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = isset($_POST['email']) ? trim($_POST['email']) : '';
     $password = isset($_POST['password']) ? trim($_POST['password']) : '';
 
     if (!empty($email) && !empty($password)) {
-        $query = "SELECT * FROM tUtente WHERE email = ? AND password = ?";
+        // Query per verificare email e password e ottenere anche l'idUtente
+        $query = "SELECT idUtente, email FROM tUtente WHERE email = ? AND password = ?";
         $stmt = mysqli_prepare($db_remoto, $query);
 
         if ($stmt) {
@@ -15,10 +17,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
 
-            if (mysqli_num_rows($result) === 1) {
-                session_start();
+            if ($row = mysqli_fetch_assoc($result)) {
+                // Ottieni idUtente ed email dall'utente autenticato
+                $idUtente = $row['idUtente'];
+                $email = $row['email'];
+
+                // Registra i dati nella sessione
                 $_SESSION['user'] = $email;
-                header("Location: index.php");
+                $_SESSION['idUtente'] = $idUtente;
+
+                // Recupera l'URL di reindirizzamento
+                echo '<script>
+                    const redirectUrl = localStorage.getItem("redirect_url");
+                    if (redirectUrl) {
+                        window.location.href = redirectUrl;
+                        localStorage.removeItem("redirect_url");
+                    } else {
+                        window.location.href = "index.php";
+                    }
+                </script>';
                 exit;
             } else {
                 $error = "Username o password errati.";
@@ -33,8 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 mysqli_close($db_remoto);
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -98,63 +115,6 @@ mysqli_close($db_remoto);
                 </div>
             </div>
         </form>
-
-
-        <!-- <div class="pay">
-            <div class="method-payment">
-                <img src="images/cartadeocente.png" alt="">
-                <img src="images/cartecultura.png" alt="">
-                <img src="images/paypall-removebg-preview.png" alt="">
-                <img src="images/mastercard-removebg-preview.png" alt="">
-                <img src="images/visa-removebg-preview.png" alt="">
-            </div>
-        </div> -->
-
-        <div class="footer-wrapper">
-            <footer class="footer">
-                <div class="footer-decor-top">
-                    <div class="top-left"></div>
-                    <div class="top-center"></div>
-                    <div class="top-right"></div>
-                </div>
-                <div class="footer-content">
-                    <div class="footer-section about">
-                        <h3>La Tua Azienda</h3>
-                        <p>Siamo una compagnia impegnata a portare innovazione e creatività nel mondo digitale.</p>
-                    </div>
-
-                    <div class="footer-section links">
-                        <h3>Link Utili</h3>
-                        <ul>
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#">Servizi</a></li>
-                            <li><a href="#">Chi Siamo</a></li>
-                            <li><a href="#">Contatti</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="footer-section contact">
-                        <h3>Contatti</h3>
-                        <p><strong>Email:</strong> info@azienda.com</p>
-                        <p><strong>Telefono:</strong> +39 012 345 6789</p>
-                    </div>
-
-                    <div class="footer-section social">
-                        <h3>Seguici</h3>
-                        <div class="social-icons">
-                            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="footer-decor">
-                    <div class="wave"></div>
-                    <div class="circle"></div>
-                </div>
-            </footer>
-        </div>
-
     </div>
 </body>
 

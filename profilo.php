@@ -1,6 +1,13 @@
 <?php
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $idUtente = $_POST['idUtente'];
-        // A questo punto puoi usare $idUtente per recuperare i dati dell'utente dal database
-    }
+session_start();
+
+$_SESSION = [];
+
+// Distruggi la sessione
+session_destroy();
+
+// Reindirizza alla pagina di login o homepage
+header("Location: index.php");
+exit;
+
 ?>

@@ -1,9 +1,13 @@
 <?php
-$db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
+    $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
+    session_start();
+$utente = "";
+if (isset($_SESSION['user'])) {
+    $utente = $_SESSION['user'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,7 +32,13 @@ $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
                     <i class="fa fa-times-circle" onclick="hideMenu()" style="display: none;" id="fa-times-circle"></i>
                     <ul>
                         <li><a href="cart.php"><i class="fa-solid fa-heart"></i></a></li>
-                        <li><a href="profilo.php"><i class="fa-solid fa-user"></i></a></li>
+                        <?php
+                        if ($utente != "") {
+                            echo '<li><a href="profilo.php"><i class="fa-solid fa-user"></i></a></li>';
+                        } else {
+                            echo '<li><a href="login.php"><i class="fa-solid fa-user"></i></a></li>';
+                        }
+                        ?>
                     </ul>
                 </div>
                 <i class="fa fa-bars" onclick="showMenu()"></i>

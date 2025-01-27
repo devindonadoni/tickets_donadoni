@@ -199,7 +199,7 @@ if (isset($_SESSION['user'])) {
         <a href="category-view.php?categoria=concerto">
             <h1 class="label">Concerti:</h1>
         </a>
-        <div class="concerti-container swiper">
+        <div class="concerto-container swiper">
             <div id="slide-concerto" class="swiper-wrapper">
             </div>
             <div class="result-next swiper-button-next"></div>
@@ -295,18 +295,20 @@ if (isset($_SESSION['user'])) {
             </footer>
     </div>
 
+    
+
     </div>
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="script/load-events.js"></script>
     <script src="script/script.js"></script>
-    <script src="script/load-concerti.js"></script>
-    <script src="script/load-partite.js"></script>
-    <script src="script/load-tour.js"></script>
-    <script src="script/load-teatro.js"></script>
 </body>
 
 <script>
+
+
+
     document.getElementById("scrollToFilters").addEventListener("click", function (event) {
         event.preventDefault(); // Evita il comportamento predefinito del link
         const filtersSection = document.getElementById("filtri-container");

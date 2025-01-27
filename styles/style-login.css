@@ -20,7 +20,9 @@ a {
     width: 100%;
     /* Usa una larghezza relativa per adattarsi a diverse dimensioni di schermo */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(#4680ebcf, #4680eb00, #4680eb00);
     /* Leggero effetto ombra */
+    height: 100vh;
 }
 
 /* Sezione Header */

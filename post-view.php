@@ -1,6 +1,13 @@
 <?php
 $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
 
+
+session_start();
+$utente = "";
+if (isset($_SESSION['user'])) {
+    $utente = $_SESSION['user'];
+
+}
 if (!$db_remoto) {
     die("Errore di connessione: " . mysqli_connect_error());
 }
@@ -19,6 +26,7 @@ WHERE
     e.idEvento = $idEvento";
 
 $result = mysqli_query($db_remoto, $sql);
+
 ?>
 
 <!DOCTYPE html>
@@ -33,8 +41,6 @@ $result = mysqli_query($db_remoto, $sql);
         rel="stylesheet">
     <script src="https://kit.fontawesome.com/1c5c930d58.js" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-
     <link rel="stylesheet" href="styles/style-postview.css">
 </head>
 
@@ -47,8 +53,14 @@ $result = mysqli_query($db_remoto, $sql);
                 <div class="nav-links" id="navlinks">
                     <i class="fa fa-times-circle" onclick="hideMenu()" style="display: none;" id="fa-times-circle"></i>
                     <ul>
-                        <li><a href="preferiti.php"><i class="fa-solid fa-heart"></i></a></li>
-                        <li><a href="profilo.php"><i class="fa-solid fa-user"></i></a></li>
+                        <li><a href="cart.php"><i class="fa-solid fa-heart"></i></a></li>
+                        <?php
+                        if ($utente != "") {
+                            echo '<li><a href="profilo.php"><i class="fa-solid fa-user"></i></a></li>';
+                        } else {
+                            echo '<li><a href="login.php"><i class="fa-solid fa-user"></i></a></li>';
+                        }
+                        ?>
                     </ul>
                 </div>
                 <i class="fa fa-bars" onclick="showMenu()"></i>
@@ -56,48 +68,47 @@ $result = mysqli_query($db_remoto, $sql);
         </section>
 
         <div class="event-view-container">
+
+            <?php
+            if ($result && $result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $date = new DateTime($row['dataOraEvento']);
+
+                    // Estrai il giorno, il mese e l'ora
+                    $day = $date->format('d');  // Ottiene il giorno con due cifre
+                    $month = strtoupper($date->format('F'));  // Ottiene il mese in formato lungo e lo converte in maiuscolo
+                    $hour = $date->format('H');  // Ottiene l'ora in formato a 24 ore
+                    $minutes = $date->format('i');  // Ottiene i minuti
             
-                    <?php
-                    if ($result && $result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
+                    // Format la data come "dd AGOSTO hh:mm"
+                    $formattedDate = $day . ' ' . $month . ' ' . $hour . ':' . $minutes;
+                    $categoria = strtoupper(string: $row['categoria']);
 
-                            $date = new DateTime($row['dataOraEvento']);
+                    echo '<div class="event-details">';
+                    echo '<img src="' . $row['pathFotoLocandina'] . '" alt="' . $row['nomeEvento'] . '" class="event-image">';
+                    echo '<div id="event-info" class="event-info">';
 
-                            // Estrai il giorno, il mese e l'ora
-                            $day = $date->format('d');  // Ottiene il giorno con due cifre
-                            $month = strtoupper($date->format('F'));  // Ottiene il mese in formato lungo e lo converte in maiuscolo
-                            $hour = $date->format('H');  // Ottiene l'ora in formato a 24 ore
-                            $minutes = $date->format('i');  // Ottiene i minuti
-                    
-                            // Format la data come "dd AGOSTO hh:mm"
-                            $formattedDate = $day . ' ' . $month . ' ' . $hour . ':' . $minutes;
-                            $categoria = strtoupper(string: $row['categoria']);
+                    echo '<a href="category-view.php?categoria=' . $row['categoria'] . '">' . $categoria . '</a>';
+                    echo '<h1>' . $row['nomeEvento'] . '</h1>';
+                    echo '<div class="info-location">';
+                    echo '<div class="where">';
+                    echo '<i class="fa-solid fa-calendar"></i>';
+                    echo '<p>' . $row['citta'] . ' <br> ' . $row['locazione'] . '</p>';
+                    echo '</div>';
+                    echo '<div class="where">';
+                    echo '<i class="fa-solid fa-location-dot"></i>';
+                    echo '<p>' . $formattedDate . '</p>';
+                    echo '</div>';
+                    echo '</div>';
+                    echo '<h2>' . $row['biofrafia'] . '</h2>';
 
-                            echo '<div class="event-details">';
-                            echo '<img src="'.$row['pathFotoLocandina'].'" alt="'.$row['nomeEvento'].'" class="event-image">';
-                            echo '<div id="event-info" class="event-info">';
-
-                            echo '<a href="category-view.php?categoria='.$row['categoria'].'">'. $categoria . '</a>';
-                            echo '<h1>' . $row['nomeEvento'] . '</h1>';
-                            echo '<div class="info-location">';
-                            echo '<div class="where">';
-                            echo '<i class="fa-solid fa-calendar"></i>';
-                            echo '<p>' . $row['citta'] . ' <br> ' . $row['locazione'] . '</p>';
-                            echo '</div>';
-                            echo '<div class="where">';
-                            echo '<i class="fa-solid fa-location-dot"></i>';
-                            echo '<p>' . $formattedDate . '</p>';
-                            echo '</div>';
-                            echo '</div>';
-                            echo '<h2>' . $row['biofrafia'] . '</h2>';
-
-                            echo '</div>';
-                            echo '</div>';
-                        }
-                    } else {
-                        die("NO DATA");
-                    }
-                    ?>
+                    echo '</div>';
+                    echo '</div>';
+                }
+            } else {
+                die("NO DATA");
+            }
+            ?>
 
             <div class="tickets">
                 <h1 class="label">Prenota il tuo biglietto adesso!</h1>
@@ -117,55 +128,65 @@ $result = mysqli_query($db_remoto, $sql);
                             <h1>Categoria di biglietto:</h1>
                         </div>
                     </div>
-                        <?php
-                        $sql = "SELECT * FROM tEvento e 
-                                JOIN tSettore l ON e.idEvento = l.idEvento 
-                                WHERE e.idEvento = $idEvento";
-                        $result = mysqli_query($db_remoto, $sql);
+                    <?php
+                    $sql = "SELECT * FROM tEvento e 
+                        JOIN tSettore l ON e.idEvento = l.idEvento 
+                        WHERE e.idEvento = $idEvento";
+                    $result = mysqli_query($db_remoto, $sql);
 
-                        if ($result && $result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                echo '<div class="ticket-section">';
-                                echo '<div class="ticket-option">';
-                                echo '<h1>'.$row['nomeSettore'].'</h1>';
-                                echo '</div>';
-                                echo '<div class="ticket-option">';
-                                echo '<p id="prato-a-price">€'.$row['prezzo'].'</p>';
-                                echo '<input type="radio" name="Categoria" value="prato a">';
-                                echo '</div>';
-                                echo '</div>';
+                    if ($result && $result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo '<div class="ticket-section">';
+
+                            // Nome settore
+                            echo '<div class="ticket-option">';
+                            echo '<h1>' . $row['nomeSettore'] . '</h1>';
+                            echo '</div>';
+
+                            // Prezzo settore e opzione selezione
+                            echo '<div class="ticket-option">';
+                            echo '<p id="prato-a-price">€' . $row['prezzo'] . '</p>';
+
+                            // Verifica se i posti sono disponibili
+                            if ($row['postiTotali'] > 0) {
+                                echo '<input type="radio" name="Categoria" value="' . $row['idSettore'] . '">';
+                            } else {
+                                echo '<p style="color: red; font-size: 0.9em;">Settore esaurito</p>';
                             }
-                        }else{
-                            echo '<h1 class="error">Nessun settore disponibile ancora</h1>';
+
+                            echo '</div>';
+                            echo '</div>';
                         }
-                        ?>
+                    } else {
+                        echo '<h1 class="error">Nessun settore disponibile ancora</h1>';
+                    }
+                    ?>
+
                 </div>
 
-                <a href="check-out.php">
-                    <div class="checkout-button-container">
-                        <div class="checkout-button">
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            <p><span></span> biglietti, €<span id="total-price">0</span></p>
-                        </div>
+                <div class="checkout-button-container">
+                    <div class="checkout-button">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <p><span></span> biglietti, €<span id="total-price">0</span></p>
                     </div>
-                </a>
+                </div>
             </div>
 
-        <!-- concerti -->
-        <a href="concerti-catogry.php">
-            <h1 class="label">Eventi simili:</h1>
-        </a>
-        <div class="concerti-container swiper">
-            <!-- Additional required wrapper -->
-            <div id="slide-concerti" class="swiper-wrapper">
-            </div>
-            <div class="result-next swiper-button-next"></div>
-            <div class="result-prev swiper-button-prev"></div>
+            <!-- concerti 
+            <a href="concerti-catogry.php">
+                <h1 class="label">Eventi simili:</h1>
+            </a>
+            <div class="concerti-container swiper">
+                 Additional required wrapper 
+                <div id="slide-concerti" class="swiper-wrapper">
+                </div>
+                <div class="result-next swiper-button-next"></div>
+                <div class="result-prev swiper-button-prev"></div>
 
+            </div> -->
         </div>
-    </div>
 
-    <div class="pay">
+        <div class="pay">
             <div class="method-payment">
                 <img src="images/cartadeocente.png" alt="">
                 <img src="images/cartecultura.png" alt="">
@@ -223,67 +244,170 @@ $result = mysqli_query($db_remoto, $sql);
 
 </body>
 
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<script src="script/script.js"></script>
-<script src="script/load-concerti.js"></script>
 
 <script>
-   document.addEventListener("DOMContentLoaded", function () {
-    const ticketSelector = document.querySelector('.ticket-selector');
-    const removeButton = ticketSelector.querySelector('.remove-button');
-    const addButton = ticketSelector.querySelector('.add-button');
-    const ticketCounter = ticketSelector.querySelector('.ticket-counter');
-    const totalPriceElement = document.getElementById('total-price');
-    const checkoutButton = document.querySelector('.checkout-button p');
-    const radioButtons = document.querySelectorAll('input[name="Categoria"]');
-    let numberOfTickets = 1;
+    document.addEventListener("DOMContentLoaded", function () {
+        const ticketSelector = document.querySelector('.ticket-selector');
+        const removeButton = ticketSelector.querySelector('.remove-button');
+        const addButton = ticketSelector.querySelector('.add-button');
+        const ticketCounter = ticketSelector.querySelector('.ticket-counter');
+        const totalPriceElement = document.getElementById('total-price');
+        const checkoutButton = document.querySelector('.checkout-button p');
+        let numberOfTickets = 1;
 
-    function updateCounter(newCount) {
-        numberOfTickets = newCount;
-        ticketCounter.textContent = numberOfTickets;
-        removeButton.disabled = numberOfTickets === 1; // Disabilita il pulsante "Rimuovi" a 1 biglietto
-        addButton.disabled = numberOfTickets === 4;    // Disabilita il pulsante "Aggiungi" a 4 biglietti
+        // Funzione per calcolare il prezzo totale
+        function calculateTotalPrice() {
+            const selectedCategory = document.querySelector('input[name="Categoria"]:checked');
+            if (!selectedCategory) {
+                totalPriceElement.textContent = "0";
+                checkoutButton.innerHTML = `<span></span> 0 biglietti, €0`;
+                return 0;
+            }
+
+            // Ottieni il prezzo della categoria selezionata
+            let categoryPrice = parseFloat(
+                selectedCategory.closest('.ticket-section')
+                    .querySelector('.ticket-option p')
+                    .textContent.replace('€', '').replace(',', '.')
+            );
+
+            // Calcola il prezzo totale
+            const totalPrice = Math.round(categoryPrice * numberOfTickets);
+            totalPriceElement.textContent = totalPrice;
+            checkoutButton.innerHTML = `<span>${numberOfTickets}</span> biglietti, €${totalPrice}`;
+
+            return totalPrice; // Restituisce il totale come intero
+        }
+
+        // Gestione incremento e decremento biglietti
+        addButton.addEventListener('click', function () {
+            numberOfTickets++;
+            ticketCounter.textContent = numberOfTickets;
+
+            if (numberOfTickets === 4) {
+                addButton.disabled = true;
+            } else {
+                addButton.disabled = false;
+            }
+            calculateTotalPrice();
+        });
+
+        removeButton.addEventListener('click', function () {
+            if (numberOfTickets > 1) {
+                numberOfTickets--;
+                ticketCounter.textContent = numberOfTickets;
+                addButton.disabled = false;
+                if (numberOfTickets === 1) {
+                    removeButton.disabled = true;
+                }
+                calculateTotalPrice();
+            }
+        });
+
+        // Calcolare il totale quando una categoria viene selezionata
+        const radioButtons = document.querySelectorAll('input[name="Categoria"]');
+        radioButtons.forEach(button => {
+            button.addEventListener('change', calculateTotalPrice);
+        });
+
+
+
+
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const idEvento = urlParams.get('idEvento');
+
+
+        // Crea l'oggetto di dati da inviare all'API
+        const dataPrenotazione = {
+            idEvento: () => idEvento,
+            idSettore: () => {
+                const selectedCategory = document.querySelector('input[name="Categoria"]:checked');
+                return selectedCategory ? selectedCategory.value : null;
+            },
+            quantita: () => numberOfTickets
+        };
+
+
+
+        // Funzione per inviare la prenotazione tramite fetch
+        async function sendBooking() {
+
+            const idUtente = "<?php echo isset($_SESSION['idUtente']) ? $_SESSION['idUtente'] : ''; ?>";  // Recupera l'ID utente dalla sessione PHP
+
+            if (!idUtente) {
+                // Salva la pagina corrente in localStorage prima di reindirizzare
+                localStorage.setItem('redirect_url', window.location.href);
+                window.location.href = 'login.php';
+                return;
+            }
+            console.log("dataPrenotazione:", {
+                idEvento: dataPrenotazione.idEvento(),
+                idSettore: dataPrenotazione.idSettore(),
+                quantita: dataPrenotazione.quantita()
+            });
+            try {
+                const response = await fetch('api/prenotazioni/verificaPosti.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        idEvento: dataPrenotazione.idEvento(),  // Aggiungi idEvento
+                        idSettore: dataPrenotazione.idSettore(),
+                        quantita: dataPrenotazione.quantita()
+                    }),
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    alert("Verifica posti completa!");
+
+                    try {
+                        const responsePren = await fetch('api/prenotazioni/creaPrenotazione.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                idEvento: dataPrenotazione.idEvento(),  // Aggiungi idEvento
+                                idSettore: dataPrenotazione.idSettore(),
+                                quantita: dataPrenotazione.quantita()
+                            }),
+                        });
+
+
+                        const resultPren = await responsePren.json();
+                        if (resultPren.success) {
+                            alert("Prenotazione completata con successo!");
+
+                            window.location.href = 'check-out.php';
+                        } else {
+                            alert(resultPren.message || "Errore nella prenotazione.");
+                        }
+                    } catch (error) {
+                        console.error("Errore durante la richiesta:", error);
+                        alert("Errore di connessione all'API.");
+                    }
+
+
+                    window.location.href = 'cart.php';
+                } else {
+                    alert(result.message || "Errore nella prenotazione.");
+                }
+            } catch (error) {
+                console.error("Errore durante la richiesta:", error);
+                alert("Errore di connessione all'API.");
+            }
+        }
+
+        // Aggiungi l'evento di prenotazione (può essere un pulsante "Prenota" o simile)
+        const checkoutBtn = document.querySelector('.checkout-button');
+        checkoutBtn.addEventListener('click', sendBooking);
+
+        // Inizializza il calcolo del prezzo
         calculateTotalPrice();
-    }
-
-    function calculateTotalPrice() {
-        const selectedCategory = document.querySelector('input[name="Categoria"]:checked');
-        if (!selectedCategory) {
-            totalPriceElement.textContent = "0";
-            checkoutButton.innerHTML = `<span>0</span> biglietti, €0`;
-            return;
-        }
-
-        const categoryPrice = parseFloat(
-            selectedCategory.closest('.ticket-section')
-                .querySelector('.ticket-option p')
-                .textContent.replace('€', '')
-        );
-
-        const totalPrice = (categoryPrice * numberOfTickets).toFixed(2);
-        totalPriceElement.textContent = totalPrice;
-        checkoutButton.innerHTML = `<span>${numberOfTickets}</span> biglietti, €${totalPrice}`;
-    }
-
-    addButton.addEventListener('click', () => {
-        if (numberOfTickets < 4) { 
-            updateCounter(numberOfTickets + 1);
-        }
     });
-
-    removeButton.addEventListener('click', () => {
-        if (numberOfTickets > 1) {
-            updateCounter(numberOfTickets - 1);
-        }
-    });
-
-    radioButtons.forEach(button => {
-        button.addEventListener('change', calculateTotalPrice);
-    });
-
-    updateCounter(1);
-    calculateTotalPrice();
-});
 
 </script>
 

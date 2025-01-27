@@ -329,11 +329,12 @@ input[type="radio"]:hover {
     align-items: center;
     gap: 20px; /* Riduci il gap */
     padding: 0.2rem 2rem;
+    transition: color 0.3s ease; /* Effetto di transizione */
 }
 
 
 .checkout-button:hover{ 
-    transform: scale(4);
+    transform: scale(1.1);
     background-color: #043ca4;
     box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.1);
 }

@@ -1,6 +1,8 @@
 <?php
 // Connessione al database
 $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
+header("Content-Type: application/json");
+
 
 // Controlla se la connessione ha avuto successo
 if (!$db_remoto) {
@@ -12,8 +14,27 @@ $categoria = isset($_GET['categoria']) ? mysqli_real_escape_string($db_remoto, $
 
 // Prepara la query SQL per selezionare gli eventi che appartengono alla categoria specificata
 if (!empty($categoria)) {
-    $query = "SELECT * FROM tevento WHERE categoria = '$categoria'";
-    $query = "SELECT * FROM tEvento e JOIN tLuogo l ON e.idLuogo = l.idLuogo WHERE e.categoria = '$categoria'";
+    $query = "
+        SELECT 
+            e.*, 
+            l.citta,
+            -- Verifica se l'evento è sold out
+            CASE 
+                WHEN (
+                    SELECT COUNT(*) 
+                    FROM tSettore 
+                    WHERE idEvento = e.idEvento
+                ) = 0 THEN 1 -- Nessun settore associato
+                WHEN (
+                    SELECT SUM(postiTotali) 
+                    FROM tSettore 
+                    WHERE idEvento = e.idEvento
+                ) = 0 THEN 1 -- Somma dei posti disponibili è zero
+                ELSE 0
+            END AS soldOut
+        FROM tEvento e 
+        JOIN tLuogo l ON e.idLuogo = l.idLuogo 
+        WHERE e.categoria = '$categoria'";
 }
 
 // Esegui la query

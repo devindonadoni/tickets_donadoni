@@ -169,78 +169,40 @@ nav .fa {
 
 /*--------------------------------------------------image----------------------------------*/
 
-.image-container {
+
+.image-container{
     position: relative;
     width: 100%;
-    height: 90vh;
+    max-height: 100vh;
     margin-top: -10vh;
-    z-index: 1;
 }
 
-.image-wrapped {
-    max-width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-}
-
-.image-item img {
-    min-width: 100vh;
+.card-link img{
+    width: 100%;
     height: 100%;
     object-fit: cover;
-    /* Adatta l'immagine senza distorcerla */
 }
 
-/* Testo sovrapposto */
-.card-link p,
-.card-link h2 {
+.text-overlay{
     position: absolute;
-    bottom: 10%;
-    left: 5%;
-    z-index: 2;
-    /* Testo sopra l'immagine */
-    color: white;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    bottom: 15%;
+    left: 3.5rem;
     margin: 0;
 }
 
 .card-link p {
     font-size: 2rem;
-    /* Mantieni la dimensione del titolo */
     font-weight: bold;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.1rem;
+    color: white;
 }
 
 .card-link h2 {
+    color: white;
     font-size: 1.2rem;
     opacity: 60%;
 }
 
-/* Per gestire la responsività */
-@media (max-width: 768px) {
-    .image-container {
-        height: 50vh;
-    }
-
-    .card-link p {
-        font-size: 1.5rem;
-    }
-
-    .card-link h2 {
-        font-size: 1rem;
-    }
-}
-
-.card-link .text-overlay {
-    position: absolute;
-    bottom: 5%;
-    left: 3%;
-    width: 100%;
-    padding: 10px;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
 
 .image-prev,
 .image-next {
@@ -275,6 +237,20 @@ nav .fa {
     opacity: 1;
 }
 
+
+@media (max-width: 768px) {
+    .image-container {
+        height: 50vh;
+    }
+
+    .card-link p {
+        font-size: 1.5rem;
+    }
+
+    .card-link h2 {
+        font-size: 1rem;
+    }
+}
 
 /*---------------------------------categorie------------------------*/
 
@@ -402,7 +378,15 @@ nav .fa {
 }
 
 .input-filter:hover {
-    border-bottom: 2px solid #2f59a7;
+    cursor: text;
+    border-bottom:2px solid #1861ce;
+}
+
+.input-filter:focus {
+    border: 2px solid #1861ce; /* Cambia colore bordo */
+    outline: none; /* Rimuove il bordo di default */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.289); /* Aggiunge ombra */
+    transition: all 0.1s ease; /* Animazione fluida */
 }
 
 .input-filter::placeholder {
@@ -424,6 +408,18 @@ nav .fa {
     /* Centra il testo della select */
 }
 
+.select-filter:hover {
+    cursor: text;
+    border-bottom:2px solid #1861ce;
+}
+
+.select-filter:focus {
+    border: 2px solid #1861ce; /* Cambia colore bordo */
+    outline: none; /* Rimuove il bordo di default */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.289); /* Aggiunge ombra */
+    transition: all 0.1s ease; /* Animazione fluida */
+}
+
 .input-date {
     width: 100%;
     max-width: 300px;
@@ -436,6 +432,19 @@ nav .fa {
     text-align: center;
     /* Centra il testo dell'input */
 }
+
+.input-date:hover {
+    cursor: text;
+    border-bottom:2px solid #1861ce;
+}
+
+.input-date:focus {
+    border: 2px solid #1861ce; /* Cambia colore bordo */
+    outline: none; /* Rimuove il bordo di default */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.289); /* Aggiunge ombra */
+    transition: all 0.1s ease; /* Animazione fluida */
+}
+
 
 /* Responsività */
 @media (max-width: 768px) {
@@ -593,7 +602,7 @@ nav .fa {
 .teatro-container,
 .tour-container,
 .partite-container,
-.concerti-container {
+.concerto-container {
     width: 100%;
     display: flex;
     justify-content: center;

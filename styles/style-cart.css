@@ -1,0 +1,248 @@
+.label-container {
+    margin: 0 3rem;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.500);
+    grid-template-columns: 2fr 1fr 1fr;
+
+}
+
+.label-container p {
+    flex-grow: 1; /* Gli altri elementi avranno tutti la stessa crescita */
+    text-align: end;
+    margin: 5px;
+    font-size: 22px;
+}
+
+.label-container .evento {
+    flex-grow: 2;
+    text-align: start;
+}
+
+
+/*-----------------------------------------content------------------------*/
+
+.item-container{
+    margin: 1rem 3rem;
+    padding-bottom: 20px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.501);
+    transition: all 0.2s cubic-bezier(0,-0.56,.85,1.78);
+}
+
+.container-img img{
+    width: 250px;
+    height: 200px;
+    border-radius: 30px;
+    border-bottom-left-radius: 0;
+}
+
+.container-img{
+    display: flex;
+    flex-direction: row;
+    grid-column: 1 / 2;
+}
+
+.concert-info{
+    text-align: start;
+    margin: 0 2rem 0;
+    grid-column: 1 / 2;
+}
+
+.concert-info p{
+    margin: 0.1rem 0;
+    font-size: 20px;
+    opacity: 60%;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.concert-info h1{
+    margin: 2rem 0 0;
+}
+
+
+.timer-container {
+    grid-column: 2 / 3;
+    padding-right: 20px;
+    height: 100%;
+    display: grid;
+    place-items: center;
+}
+
+.timer-container p {
+    background-color: #4680EB;
+    border-radius: 30px;
+    width: 60%;
+    font-size: 22px;
+    opacity: 0.8;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.posto-container{
+    padding: 0 35px;
+    display: flex;
+    align-items: center;
+}
+
+.posto-container p {
+    font-size: 22px;
+    opacity: 0.8;
+    text-align: start;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.item-container p {
+    margin: 0;
+    opacity: 0.9;
+}
+
+.price-container {
+    grid-column: 4 / 5;
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+}
+
+.price-container p{
+    font-size: 22px;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.price-container i{
+    margin: 5px 20px;
+    margin-right: 0;
+    font-size: 20px;
+    cursor: pointer;
+    color: #4680EB;
+}
+
+/*-----------------checkout------------------*/
+
+.checkout-container{
+    width: 50%;
+    margin-left: auto;
+    margin-right: 3rem;
+}
+
+.totale {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.800);
+}
+
+.totale h1{
+    font-size: 22px;
+    opacity: 80%;
+}
+
+.totale p{
+    font-size: 22px;
+    opacity: 80%;
+}
+
+/*----------commissioni-----------*/
+
+
+.commissioni {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.800);
+}
+
+.commissioni h1{
+    font-size: 22px;
+    opacity: 80%;
+}
+
+.commissioni p{
+    font-size: 22px;
+    opacity: 80%;
+
+}
+
+
+/*----------commissioni-----------*/
+
+
+.grantotale {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.800);
+}
+
+.grantotale h1{
+    font-size: 35px;
+}
+
+.checkout-button-container{
+    margin-top: 3em;
+    width: 100%;
+    height: auto;
+}
+
+.checkout-button-container input{
+    background-color: #4680EB;
+    width: 50%;
+    margin-left: 50%;
+    padding: 1.5rem;
+    border-radius: 20px;
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    border: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.checkout-button-container input:hover{
+    transform: scale(1.1);
+    box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.1);
+}
+
+
+/*----------------------*/
+
+/* .item-container:hover{
+    transform: translatex(5px) translateY(-5px);
+} */
+
+.no-items-container{
+    width: 100%;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+
+.no-items-container p{
+    padding: 5rem 0;
+    font-size: 22px;
+}
+
+.no-items-container h1{
+    text-align: center;
+    background-color: #4680EB;
+    color: white;
+    font-size: 25px;
+    padding: 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+}
+
+
+.no-items-container h1:hover{
+    transform: scale(1.1);
+    box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.1);
+}
