@@ -1,6 +1,6 @@
 <?php
-    $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
-    session_start();
+require_once('api/config/config.php');
+session_start();
 $utente = "";
 if (isset($_SESSION['user'])) {
     $utente = $_SESSION['user'];
@@ -8,6 +8,7 @@ if (isset($_SESSION['user'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,12 +75,14 @@ if (isset($_SESSION['user'])) {
                     ?>
                 </select>
             </div>
-            
+
             <div class="luogo">
                 <h1>Data</h1>
                 <input type="date" id="data-select" class="input-date">
             </div>
-
+            <!-- <div class="remove-filter" onclick="removeFilter()">
+                <h1>REMOVE</h1>
+            </div> -->
 
         </div>
 
@@ -169,11 +172,16 @@ if (isset($_SESSION['user'])) {
                     const hour = String(date.getHours()).padStart(2, '0');
                     const minutes = String(date.getMinutes()).padStart(2, '0');
 
+                    const soldOutOverlay = post.soldOut == 1 || post.soldOut === "1"
+                        ? '<div class="result-gradient-overlay"><h1>SOLD OUT</h1></div>'
+                        : '';
+
                     const formattedDate = `${day} ${month} ${hour}:${minutes}`;
                     output += `
                     
                     <a href="post-view.php?idEvento=${post.idEvento}">
-                            <div class="card-result">
+                        <div class="card-result">
+                            ${soldOutOverlay}
                                 <img id="background-image" src="${post.pathFotoLocandina}" alt="Card Image">
                                 <div class="didascalia">
                                     <h2>${post.nomeEvento}</h2>
@@ -216,7 +224,7 @@ if (isset($_SESSION['user'])) {
             } else {
                 // Altrimenti, esegui la ricerca AJAX
                 $.ajax({
-                    url: "php/search.php",
+                    url: "php/search-query.php",
                     method: "POST",
                     data: {
                         query: query,
@@ -241,6 +249,22 @@ if (isset($_SESSION['user'])) {
         });
 
     });
+
+    function removeFilter() {
+        // Resetta il campo di ricerca testuale
+        document.getElementById("search-box").value = "";
+
+        // Resetta i selettori dropdown
+        document.getElementById("citta-select").value = "";
+
+        // Resetta il campo data
+        document.getElementById("data-select").value = "";
+
+        // Nasconde la sezione dei risultati
+        document.getElementById("results-section").style.display = "none";
+
+        searchEvents();
+    }
 
 </script>
 

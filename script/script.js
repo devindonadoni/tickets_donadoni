@@ -51,15 +51,15 @@ const commonSwiperOptions = {
 
   breakpoints: {
     0: {
-        slidesPerView: 1
+        slidesPerView: 1,
     },
     768: {
-        slidesPerView: 2
+        slidesPerView: 2,
     },
     1024: {
-        slidesPerView: 5
-    }
-}
+        slidesPerView: 5,
+    },
+},
 };
 
 // Inizializzazione swiper per entrambi i contenitori

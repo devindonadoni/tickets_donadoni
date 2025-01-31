@@ -1,9 +1,19 @@
 <?php
-    $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
-    session_start();
+require_once('api/config/config.php');
+include_once 'api/config/init.php';
+
 $utente = "";
 if (isset($_SESSION['user'])) {
     $utente = $_SESSION['user'];
+    $idUtente = $_SESSION['idUtente'];
+
+    $sql = "SELECT COUNT(*) AS count FROM tcarrello WHERE pagata = 0 AND disponibile = 1 AND idUtente = '$idUtente'";
+    $result = mysqli_query($db_remoto, $sql);
+
+    if ($result) {
+        $row = mysqli_fetch_assoc($result);
+        $countCart = $row['count'];
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -14,10 +24,12 @@ if (isset($_SESSION['user'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>AULIC TICKET</title>
-    <link rel="icon" type="image/png" href="images/logo.png">
+    <link rel="icon" type="image/png" href="images/logo-aulic.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <script src="https://kit.fontawesome.com/1c5c930d58.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
@@ -37,10 +49,67 @@ if (isset($_SESSION['user'])) {
                     <ul>
                         <li><a href="#filtri-container" id="scrollToFilters"><i
                                     class="fa-solid fa-magnifying-glass"></i></a></li>
-                        <li><a href="cart.php"><i class="fa-solid fa-heart"></i></a></li>
+                        <li>
+                            <a href="cart.php" class="cart-wrapper">
+                                <i class="fa-solid fa-heart"></i>
+                                <?php
+                                if ($utente) {
+                                    if ($result) {
+                                        echo '<span class="cart-count">';
+                                        echo $countCart;
+                                        echo '</span> <!-- Numero hardcoded -->';
+                                    }
+                                }
+                                ?>
+                            </a>
+                        </li>
+
                         <?php
                         if ($utente != "") {
-                            echo '<li><a href="profilo.php"><i class="fa-solid fa-user"></i></a></li>';
+                            $nomeUtente = "";
+                            $emailUtente = "";
+                            $sqlNome = "SELECT * FROM tUtente WHERE idUtente = '$idUtente'";
+                            $resultNome = mysqli_query($db_remoto, $sqlNome);
+
+
+                            if (mysqli_num_rows($resultNome) > 0) {
+                                while ($row = mysqli_fetch_assoc($resultNome)) {
+                                    $nomeUtente = $row['nome'] . " " . $row["cognome"];
+                                    $emailUtente = $row['email'];
+                                }
+                            }
+
+                            echo '<li class="profile-icon">
+                                <a class="profile-link">
+                                    <i class="fa-solid fa-user"></i>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <div class="name-container">
+                                        <h1>' . $nomeUtente . '</h1>
+                                        <p>' . $emailUtente . '</p>
+                                    </div>
+                                    <div class="dropmenu-element" onclick="rindirizza(\'profilo\')">
+                                        <i class="fa-solid fa-user"></i>
+                                        <p>Profilo</p>
+                                    </div>
+                                    <div class="dropmenu-element" onclick="rindirizza(\'Biglietti\')">
+                                        <i class="fa-solid fa-ticket"></i>
+                                        <p>Biglietti</p>
+                                    </div>
+                                    <div class="dropmenu-element" onclick="rindirizza(\'Impostazioni\')">
+                                        <i class="fa-solid fa-gear"></i>    
+                                        <p>Impostazioni</p>
+                                    </div>
+                                    <div class="dropmenu-element" onclick="rindirizza(\'Help\')">
+                                        <i class="fa-solid fa-comments"></i>
+                                        <p>Help</p>
+                                    </div>
+                                    <div class="dropmenu-element-signout" onclick="logout()">
+                                        <i class="fa-solid fa-sign-out"></i>
+                                        <p>SIGN OUT</p>
+                                    </div>
+                                </div>
+                            </li>';
                         } else {
                             echo '<li><a href="login.php"><i class="fa-solid fa-user"></i></a></li>';
                         }
@@ -163,8 +232,10 @@ if (isset($_SESSION['user'])) {
                 <h1>Data</h1>
                 <input type="date" id="data-select" class="input-date">
             </div>
+            <div class="remove-filter" onclick="removeFilter()">
+                <h1>REMOVE</h1>
+            </div>
 
-            
         </div>
 
 
@@ -194,7 +265,7 @@ if (isset($_SESSION['user'])) {
             <!-- Swiper Pagination -->
             <div class="result-pagination swiper-pagination"></div>
         </div>
-                    
+
         <!-- concerti -->
         <a href="category-view.php?categoria=concerto">
             <h1 class="label">Concerti:</h1>
@@ -238,7 +309,7 @@ if (isset($_SESSION['user'])) {
             <div class="result-pagination swiper-pagination"></div>
         </div>
 
-        
+
         <div class="pay">
             <div class="method-payment">
                 <img src="images/cartadeocente.png" alt="">
@@ -293,9 +364,9 @@ if (isset($_SESSION['user'])) {
                     <div class="circle"></div>
                 </div>
             </footer>
-    </div>
+        </div>
 
-    
+
 
     </div>
 
@@ -303,10 +374,31 @@ if (isset($_SESSION['user'])) {
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="script/load-events.js"></script>
     <script src="script/script.js"></script>
+    <script src="script/search.js"></script>
 </body>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const profileIcon = document.querySelector('.profile-icon');
+        const dropdownMenu = document.querySelector('.dropdown-menu');
 
+        // Mostra il menu quando si passa il mouse sull'icona del profilo
+        profileIcon.addEventListener('mouseenter', function () {
+            dropdownMenu.style.display = 'block';
+        });
+
+        // Nascondi il menu quando si clicca fuori dal menu o sull'icona del profilo
+        document.addEventListener('click', function (event) {
+            if (!profileIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+
+        // Nascondi il menu quando si scorre la pagina
+        document.addEventListener('scroll', function () {
+            dropdownMenu.style.display = 'none';
+        });
+    });
 
 
     document.getElementById("scrollToFilters").addEventListener("click", function (event) {
@@ -328,67 +420,35 @@ if (isset($_SESSION['user'])) {
 </script>
 
 <script>
-    $(document).ready(function () {
-    let swiper = new Swiper('.result-container', {
-        navigation: {
-            nextEl: '.result-next',
-            prevEl: '.result-prev',
-        },
-        pagination: {
-            el: '.result-pagination',
-            clickable: true,
-        },
-        slidesPerView: 5,
-        spaceBetween: 10,
-    });
 
-    $("#search-box, #categoria-select, #citta-select, #data-select").on("input change", function () {
-        let query = $("#search-box").val().trim();
-        let categoria = $("#categoria-select").val();
-        let citta = $("#citta-select").val();
-        let data = $("#data-select").val();
+    function rindirizza(pagina) {
+        window.location.href = pagina + '.php';
+    }
 
-        // Controlla se sono selezionate le opzioni predefinite
-        let noFiltersActive =
-            query === "" &&
-            (categoria === "Scegli categoria" || categoria === "") &&
-            (citta === "Scegli città" || citta === "") &&
-            (data === "");
 
-        if (noFiltersActive) {
-            // Nascondi la sezione dei risultati
-            $("#result").html("");
-            $("#results-section").fadeOut();
-            return;
-        }
 
-        $.ajax({
-            url: "php/search.php",
-            method: "POST",
-            data: {
-                query: query,
-                categoria: categoria,
-                citta: citta,
-                data: data
-            },
-            success: function (data) {
-                if (data.trim().length > 0) {
-                    $("#result").html(data); // Inserisci i risultati
-                    $("#results-section").fadeIn(); // Mostra la sezione dei risultati
-                } else {
-                    $("#result").html(""); // Nessun risultato
-                    $("#results-section").fadeOut(); // Nascondi la sezione
-                }
-                swiper.update(); // Aggiorna Swiper per rilevare i nuovi elementi
-            },
-            error: function () {
-                console.error("Errore durante la richiesta AJAX.");
+    function logout() {
+        Swal.fire({
+            title: 'Sei sicuro?',
+            text: `Effettuarai il logout.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sì!',
+            cancelButtonText: 'Annulla',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'logout.php';
+            } else {
+                Swal.fire(
+                    'Errore',
+                    'ah ah ah NON PUOI ANDARTENE COSI FACILMENTE',
+                    'error'
+                );
             }
         });
-    });
-});
-
-
+    }
 
 
 </script>

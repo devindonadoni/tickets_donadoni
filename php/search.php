@@ -1,15 +1,39 @@
 <?php
+header('Content-Type: application/json');
+
 $db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
 
-if (isset($_POST['query']) || isset($_POST['categoria']) || isset($_POST['luogo']) || isset($_POST['data'])) {
+if (isset($_POST['query']) || isset($_POST['categoria']) || isset($_POST['citta']) || isset($_POST['data'])) {
     $search = isset($_POST['query']) ? $db_remoto->real_escape_string($_POST['query']) : '';
     $categoria = isset($_POST['categoria']) ? $db_remoto->real_escape_string($_POST['categoria']) : '';
     $luogo = isset($_POST['citta']) ? $db_remoto->real_escape_string($_POST['citta']) : '';
     $data = isset($_POST['data']) ? $db_remoto->real_escape_string($_POST['data']) : '';
-    
-    $query = "SELECT * FROM tEvento e 
-              JOIN tLuogo l ON e.idLuogo = l.idLuogo 
-              WHERE 1=1"; // Condizione di base sempre vera
+
+    $query = "
+        SELECT 
+            e.idEvento, 
+            e.nomeEvento, 
+            e.dataOraEvento, 
+            e.pathFotoLocandina, 
+            l.citta,
+            -- Verifica se l'evento è sold out
+            CASE 
+                WHEN (
+                    SELECT COUNT(*) 
+                    FROM tSettore 
+                    WHERE idEvento = e.idEvento
+                ) = 0 THEN 1 -- Nessun settore associato
+                WHEN (
+                    SELECT SUM(postiTotali) 
+                    FROM tSettore 
+                    WHERE idEvento = e.idEvento
+                ) = 0 THEN 1 -- Somma dei posti disponibili è zero
+                ELSE 0
+            END AS soldOut
+        FROM tEvento e 
+        JOIN tLuogo l ON e.idLuogo = l.idLuogo 
+        WHERE 1=1
+    ";
 
     // Aggiungere i filtri solo se presenti
     if (!empty($search)) {
@@ -26,31 +50,15 @@ if (isset($_POST['query']) || isset($_POST['categoria']) || isset($_POST['luogo'
     }
 
     $result = $db_remoto->query($query);
+    $eventi = [];
 
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            echo '<div class="swiper-slide">';
-            echo ' <a href="post-view.php?idEvento=' . $row['idEvento'] . '">';
-            echo ' <div class="card-result">';
-            echo '<img id="background-image" src="' . $row['pathFotoLocandina'] . '" alt="Card Image">';
-            echo '<div class="didascalia">';
-            echo ' <h2>' . $row['nomeEvento'] . '</h2>';
-            echo '<h3>' . $row['citta'] . '</h3>';
-            echo '<h3>' . $row['dataOraEvento'] . '</h3>';
-            echo '</div>';
-            echo '</div>';
-            echo '</a>';
-            echo '</div>';
+            $eventi[] = $row;
         }
-    } else {
-        echo "<p style='display: flex;
-            justify-content: center; 
-            align-items: center;     
-            height: 100%;            
-            width: 100%;             
-            text-align: center;      
-            font-size: 20px;'>No results found</p>";
     }
-    exit; // Termina l'esecuzione
+
+    echo json_encode($eventi);
+    exit;
 }
 ?>

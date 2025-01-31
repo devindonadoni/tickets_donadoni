@@ -1,5 +1,5 @@
 <?php
-$db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
+require_once('api/config/config.php');
 session_start();
 $utente = "";
 if (isset($_SESSION['user'])) {
@@ -29,25 +29,25 @@ if (isset($_SESSION['user'])) {
     <!-- Contenitore principale -->
     <div class="main-container">
         <!-- Header -->
-        <section class="header">
-            <nav class="primary-nav">
-                <a href="index.php"><img src="images/logo-removed1.png" alt="Logo"></a>
-                <div class="nav-links" id="navlinks">
+        <section class="header" style="position: relative;">
+            <nav class="primary-nav" style="width: 100%; display: flex; justify-content: center; align-items: center; padding: 0 4rem;">
+                <a href="index.php"><img src="images/logo-removed1.png" alt="Logo" style="max-width: 300px;"></a>
+                <!-- <div class="nav-links" id="navlinks">
                     <i class="fa fa-times-circle" onclick="hideMenu()" style="display: none;" id="fa-times-circle"></i>
                     <ul>
                         <li><a href="#filtri-container" id="scrollToFilters"><i
                                     class="fa-solid fa-magnifying-glass"></i></a></li>
                         <li><a href="cart.php"><i class="fa-solid fa-heart"></i></a></li>
                         <?php
-                        if ($utente != "") {
-                            echo '<li><a href="profilo.php"><i class="fa-solid fa-user"></i></a></li>';
-                        } else {
-                            echo '<li><a href="login.php"><i class="fa-solid fa-user"></i></a></li>';
-                        }
-                        ?>
+                        // if ($utente != "") {
+                        //     echo '<li><a href="profilo.php"><i class="fa-solid fa-user"></i></a></li>';
+                        // } else {
+                        //     echo '<li><a href="login.php"><i class="fa-solid fa-user"></i></a></li>';
+                        // }
+                        // ?>
                     </ul>
                 </div>
-                <i class="fa fa-bars" onclick="showMenu()"></i>
+                <i class="fa fa-bars" onclick="showMenu()"></i> -->
             </nav>
         </section>
 
@@ -86,9 +86,8 @@ if (isset($_SESSION['user'])) {
                     <h1>Gran totale</h1>
                     <h1 id="grantotale">€0.00</h1>
                 </div>
-                <div class="checkout-button-container">
-                    <a href="api/prenotazioni/cart-query.php"><input type="submit" name="checkout-button"
-                            id="checkout-button" value="CHECKOUT"></a>
+                <div class="checkout-button-container" onclick="payment()">
+                    <input type="submit" name="checkout-button" id="checkout-button" value="CHECKOUT">
                 </div>
             </div>
         <?php endif; ?>
@@ -151,17 +150,72 @@ if (isset($_SESSION['user'])) {
     </div>
 
     <script src="script/load-cart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 <script>
     function redirect() {
-        const idUtente = "<?php echo isset($_SESSION['idUtente']) ? $_SESSION['idUtente'] : ''; ?>"; 
+        const idUtente = "<?php echo isset($_SESSION['idUtente']) ? $_SESSION['idUtente'] : ''; ?>";
         if (!idUtente) {
             localStorage.setItem('redirect_url', window.location.href);
             window.location.href = 'login.php';
             return;
         }
     }
+
+    async function payment() {
+        const grandTotalElement = document.getElementById("grantotale");
+        const grandTotal = parseFloat(grandTotalElement.textContent.replace("€", "").replace(",", "."));
+
+        console.log("Payment function triggered.");
+
+        if (isNaN(grandTotal) || grandTotal <= 0) {
+            Swal.fire(
+                'Errore',
+                'Il totale non è valido. Assicurati che ci siano elementi nel carrello.',
+                'error'
+            );
+            return;
+        }
+
+        try {
+            const response = await fetch('api/prenotazioni/checkout.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    totale: grandTotal
+                }),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                Swal.fire(
+                    'Successo',
+                    'Pagamento completato con successo!',
+                    'success'
+                ).then(() => {
+                    window.location.href = 'cart.php';
+                });
+            } else {
+                Swal.fire(
+                    'Errore',
+                    result.message || 'Si è verificato un errore durante il pagamento.',
+                    'error'
+                );
+            }
+        } catch (error) {
+            console.error("Errore durante la richiesta:", error);
+            Swal.fire(
+                'Errore',
+                'Errore di connessione con il server. Riprova più tardi.',
+                'error'
+            );
+        }
+    }
+
 </script>
 
 </html>

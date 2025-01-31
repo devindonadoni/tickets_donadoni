@@ -1,11 +1,11 @@
 <?php
 session_start();
-
-$db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
+require_once('api/config/config.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = isset($_POST['email']) ? trim($_POST['email']) : '';
     $password = isset($_POST['password']) ? trim($_POST['password']) : '';
+    $rememberMe = isset($_POST['remember_me']); // Controlla se il checkbox è selezionato
 
     if (!empty($email) && !empty($password)) {
         // Query per verificare email e password e ottenere anche l'idUtente
@@ -25,6 +25,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Registra i dati nella sessione
                 $_SESSION['user'] = $email;
                 $_SESSION['idUtente'] = $idUtente;
+
+                // Se l'utente ha selezionato "Remember Me", crea un token
+                if ($rememberMe) {
+                    $token = bin2hex(random_bytes(32)); // Genera un token sicuro
+                    $hashedToken = password_hash($token, PASSWORD_DEFAULT); // Hash del token
+
+                    // Salva il token nel database
+                    $updateQuery = "UPDATE tUtente SET remember_token = ? WHERE idUtente = ?";
+                    $updateStmt = mysqli_prepare($db_remoto, $updateQuery);
+                    mysqli_stmt_bind_param($updateStmt, "si", $hashedToken, $idUtente);
+                    mysqli_stmt_execute($updateStmt);
+                    mysqli_stmt_close($updateStmt);
+
+                    // Salva il token in un cookie (30 giorni)
+                    setcookie("remember_token", $token, time() + (86400 * 30), "/", "", true, true);
+                }
 
                 // Recupera l'URL di reindirizzamento
                 echo '<script>
@@ -51,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 mysqli_close($db_remoto);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -95,9 +112,16 @@ mysqli_close($db_remoto);
                         <input type="text" name="password" class="input-filter" placeholder="Password">
                     </div>
                     <div class="remember-me">
-                        <input type="checkbox" id="exampleCheckbox" name="exampleCheckbox">
-                        <h1>Remember me</h1>
+                        <input type="checkbox" id="remember_me" name="remember_me">
+                        <label for="remember_me">Remember me</label>
                     </div>
+                    <script src="https://accounts.google.com/gsi/client" async defer></script>
+                    <div id="g_id_onload" data-client_id="170036456019-cufiacjous2ql4dqn1hasnsti8ms9a74.apps.googleusercontent.com"
+                        data-login_uri="TICKETS/oauth_callback.php" data-auto_prompt="false">
+                    </div>
+                    <div class="g_id_signin" data-type="standard"></div>
+
+
                 </div>
 
                 <?php if (isset($error)): ?>

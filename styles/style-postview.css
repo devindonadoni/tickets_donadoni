@@ -329,7 +329,7 @@ input[type="radio"]:hover {
     align-items: center;
     gap: 20px; /* Riduci il gap */
     padding: 0.2rem 2rem;
-    transition: color 0.3s ease; /* Effetto di transizione */
+    transition: 0.2s ease; /* Effetto di transizione */
 }
 
 
@@ -774,4 +774,28 @@ input[type="radio"]:hover {
     50% {
         transform: translateY(20px);
     }
+}
+
+
+
+
+.cart-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px; /* Posiziona sopra l'icona */
+    right: -10px; /* Allinea a destra */
+    background-color: red; /* Colore del cerchio */
+    color: white; /* Colore del numero */
+    font-size: 12px; /* Dimensione del numero */
+    width: 18px; /* Dimensione del cerchio */
+    height: 18px; /* Dimensione del cerchio */
+    border-radius: 50%; /* Rende il cerchio */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Effetto ombra */
 }

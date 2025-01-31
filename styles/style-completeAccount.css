@@ -1,0 +1,281 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #E7E7E7;
+}
+
+a {
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenitore principale */
+.main-container {
+    max-width: 1800px;
+    /* Larghezza massima del contenitore */
+    margin: 0 auto;
+    /* Centra il contenitore */
+    width: 100%;
+    /* Usa una larghezza relativa per adattarsi a diverse dimensioni di schermo */
+    background: linear-gradient(#4680ebcf, #4680eb00, #4680eb00);
+}
+
+/* Sezione Header */
+.header {
+    height: 10vh;
+    width: 100%;
+    background: linear-gradient(#4680EB, #4680eb00, #4680eb00);
+    display: flex;
+    align-items: center;;
+    top: 0;
+    z-index: 10;
+    padding: 20px 0 ;
+}
+
+/* Navbar */
+.primary-nav {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 4rem;
+}
+
+.primary-nav img {
+    max-width: 300px;
+}
+
+.nav-links {
+    text-align: right;
+}
+
+.nav-links ul {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 30px;
+}
+
+.nav-links ul li {
+    list-style: none;
+}
+
+.nav-links ul li a {
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-links ul li a::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200%;
+    height: 120%;
+    background: white;
+    border-radius: 5px;
+    z-index: -1;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.nav-links ul li a:hover::before {
+    opacity: 1;
+}
+
+.nav-links ul li a:hover {
+    color: #4680EB;
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+/* Navbar mobile responsive */
+nav .fa {
+    display: none;
+}
+
+@media (max-width: 700px) {
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        overflow-x: hidden;
+        margin: 0;
+        left: 0;
+        width: 55vh;
+    }
+
+    .nav-links {
+        position: absolute;
+        background: #4680EB;
+        height: 100vh;
+        width: 200px;
+        top: 0;
+        right: -200px;
+        text-align: left;
+        z-index: 2;
+        transition: right 0.3s ease;
+    }
+
+    .nav-links ul {
+        flex-direction: column;
+        /* Cambia i link in colonna */
+        gap: 15px;
+        padding: 30px;
+    }
+
+    .nav-links ul li {
+        display: block;
+    }
+
+    nav .fa {
+        display: block;
+        color: #fff;
+        font-size: 22px;
+        cursor: pointer;
+    }
+
+    .primary-nav {
+        padding: 0 2rem;
+        /* Riduce i margini laterali su schermi piccoli */
+    }
+}
+
+/* Margini dinamici */
+@media (min-width: 1600px) {
+    .main-container {
+        max-width: 1400px;
+        /* Aumenta la larghezza del contenitore su schermi grandi */
+    }
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        width: 95%;
+        /* Riduce i margini su schermi più piccoli */
+    }
+}
+
+
+/*----------------------------login container--------------------------*/
+
+.login-container{
+    width: auto;
+    margin: 2rem 25%;
+    padding:2rem;
+    background: linear-gradient(#4680EB,#74A0F0, #78A2F0, #8BB0F3, #A2BFF5);
+    text-align: center;
+    border-radius: 30px;
+}
+
+
+.login-container h1{
+    width: 100%;
+    font-size: 40px;
+    color: white;
+    margin: 0 auto;
+    line-height: 1.1; /* Riduci lo spazio tra le righe */
+    padding: 3rem 0;
+}
+
+.credetianls{
+    width: auto;
+    height: auto;
+    margin: 0 2.5rem;
+}
+
+.nome-cognome, .date-luogo{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 15%;
+}
+
+.input-nome, .input-cognome, .input-codice, .input-date, .input-luogo {
+    color: white;
+    padding-left: 20px;
+    font-size: 23px;
+    width: 50%;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid white;
+}
+
+.input-nome::placeholder, .input-cognome::placeholder, .input-codice::placeholder, .input-luogo::placeholder{
+    font-size: 20px;
+    color: white;
+    opacity: 80%;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.289); /* Aggiunge ombra */
+    transition: all 0.1s ease; /* Animazione fluida */
+    border: 2px solid white;
+}
+
+/*-----------------------------------sczcezny---------------------------*/
+
+.codice-fiscale{
+    width: 100%;
+    margin: 10% 0;
+}
+
+.input-codice{
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.input-luogo{
+    text-transform: uppercase;
+}
+.input-date{
+    font-size: 20px;
+    color: white;
+    fill: red;
+    color-scheme: dark;
+}
+
+
+.remember-me{
+    margin: 30px;
+    align-items: center;
+    justify-content: center;
+}
+
+.remember-me input{
+    transform: scale(1.5); /* Makes the checkbox 1.5 times its original size */
+}
+
+.remember-me a:hover{
+    font-size: 17px;
+    color: #4680EB; /* Cambia colore al passaggio del mouse */
+}
+
+
+.login-button input {
+    width: 150px;
+    height: 50px;
+    background-color: white;
+    border-radius: 30px;
+    font-size: 22px;
+    color: #4680EB;
+    border: none;
+    cursor: pointer; /* Cambia il cursore a mano per indicare cliccabilità */
+    transition: transform 0.3s ease, background-color 0.3s ease; /* Transizione morbida */
+}
+
+.login-button input:hover {
+    transform: scale(1.2); /* Ingrandisce il bottone del 20% */
+    background-color: #4680EB; /* Cambia colore al passaggio del mouse */
+    color: white; /* Cambia il colore del testo */
+    box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.1);
+}

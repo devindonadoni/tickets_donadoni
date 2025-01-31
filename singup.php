@@ -1,5 +1,5 @@
 <?php
-$db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
+require_once('api/config/config.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = isset($_POST['nome']) ? trim($_POST['nome']) : '';

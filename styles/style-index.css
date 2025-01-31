@@ -166,6 +166,134 @@ nav .fa {
     }
 }
 
+.cart-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px; /* Posiziona sopra l'icona */
+    right: -10px; /* Allinea a destra */
+    background-color: red; /* Colore del cerchio */
+    color: white; /* Colore del numero */
+    font-size: 12px; /* Dimensione del numero */
+    width: 18px; /* Dimensione del cerchio */
+    height: 18px; /* Dimensione del cerchio */
+    border-radius: 50%; /* Rende il cerchio */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Effetto ombra */
+}
+
+
+.profile-icon {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%; 
+    margin-top: 10px;
+    padding: 10px 0;
+    right: -2rem;
+    background-color: #E7E7E7;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: auto;
+}
+
+.name-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    padding: 0;
+    font-size: 13px;
+    overflow: hidden;
+}
+
+.name-container h1{
+    color: #4680EB;
+    margin-bottom: 0;
+}
+
+.name-container p{
+    margin: 1px 5px;
+    opacity: 50%;
+}
+
+.dropmenu-element {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    gap: 20px;
+    background-color: #E7E7E7;
+    color: #000000;
+    opacity: 80%;
+    padding-left: 10px;
+    border-top: 2px solid rgba(0, 0, 0, 0.300);
+    font-size: 13px;
+    margin: 0 10px;
+}
+
+.dropmenu-element i{
+    opacity: 50%;
+}
+
+.dropmenu-element-signout{
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    gap: 20px;
+    color: #000000;
+    opacity: 80%;
+    padding-left: 10px;
+    border-top: 2px solid rgba(0, 0, 0, 0.300);
+    font-size: 14px;
+    margin: 0 10px;
+    color: #730505;
+    font-weight: bold;
+    transition: 1s ease-in-out;
+}
+
+
+/* Mostra il dropdown menu quando si passa il mouse sull'icona del profilo */
+.profile-icon:hover .dropdown-menu {
+    display: block;
+}
+
+
+.dropmenu-element:hover{
+    color: #4680EB;
+    font-weight: bold;
+    opacity: 100%;
+}
+
+.dropdown-menu::before {
+    content: "";
+    position: absolute;
+    top: -8px; /* Posiziona il triangolo sopra il menu */
+    right: 2rem; /* Allinea il triangolo al profilo */
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #E7E7E7; /* Colore dello sfondo del menu */
+}
+
+
+
 
 /*--------------------------------------------------image----------------------------------*/
 
@@ -473,6 +601,22 @@ nav .fa {
     }
 }
 
+.remove-filter{
+    height: auto;
+    margin-top: 25px;
+}
+
+
+.remove-filter h1{
+    cursor: pointer;
+    font-size: 15px;
+    color: white;
+    background-color: #4680EB;
+    padding: 10px 15px;
+    border-radius: 10px;
+}
+
+
 /*-------------result---------*/
 
 .result-label {
@@ -483,13 +627,149 @@ nav .fa {
 
 .result-container {
     width: 100%;
-    height: 50vh;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px 0;
     background-color: #E7E7E7;
 }
+
+
+
+/*------------------------eventi container-------------------------------*/
+
+.label {
+    padding: 0 3rem;
+    font-size: 40px;
+    color: #4680EB;
+}
+
+.teatro-container,
+.tour-container,
+.partite-container,
+.concerto-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 35px 0;
+    background-color: #E7E7E7;
+}
+
+@media screen and (max-width: 1024px) {
+    .label {
+        font-size: 2rem;
+        padding: 0 1.5rem;
+    }
+
+    .card-result {
+        width: 250px;
+        height: 350px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .label {
+        font-size: 20px;
+        padding: 0 1rem;
+    }
+    
+    .card-result {
+        width: 280px;
+        height: 380px;
+        margin-bottom: 100px;
+    }
+    
+    .concerti-container,
+    .teatro-container,
+    .tour-container,
+    .partite-container {
+        flex-direction: column;
+        /* Disposizione verticale per schermi piccoli */
+        align-items: center;
+    }
+    
+    .swiper-button-next,
+    .swiper-button-prev {
+        display: none;
+    }
+
+    .swiper-pagination-bullet,
+    .swiper-pagination-bullet-active {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .label {
+        font-size: 18px;
+        text-align: center;
+    }
+    
+    .card-result {
+        width: 180px;
+        height: 280px;
+    }
+}
+
+/*---------------------------------soldout----------------------------*/
+
+.result-gradient-overlay {
+    opacity: 1;
+    border-radius: 20px;
+    width: 100%;
+    height: 350px;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    /* Centra orizzontalmente */
+    align-items: center;
+    /* Centra verticalmente */
+    background-color: #d9d9d99d;
+}
+
+.result-gradient-overlay h1 {
+    margin: 0;
+    border-bottom: 2px solid #730505;
+    border-top: 2px solid #730505;
+    color: #730505;
+    font-size: 40px;
+}
+
+/*---------------------------------swiper-arrow-button-------------------*/
+
+.result-prev,
+.result-next {
+    color: #4680EB !important;
+    top: 45%;
+    padding: 5px;
+    background-color: rgba(161, 161, 161, 0.375);
+}
+
+.result-prev:hover,
+.result-next:hover {
+    color: rgb(46, 80, 145) !important;
+    padding: 5px;
+    background-color: rgba(161, 161, 161, 0.596);
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+.result-pagination .swiper-pagination-bullet {
+    background-color: #4680EB;
+    width: 10px;
+    height: 10px;
+    align-content: center;
+}
+
+.result-pagination .swiper-pagination-bullet-active {
+    background-color: #4680EB;
+    width: 15px;
+    height: 15px;
+    align-content: center;
+}
+
+/*------------------------------------------CARD-STYLE--------------------------------------------*/
 
 .card-result {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
@@ -535,136 +815,6 @@ nav .fa {
     font-size: 14px;
     margin: 2px 0;
     opacity: 70%;
-}
-
-.result-gradient-overlay {
-    opacity: 1;
-    border-radius: 20px;
-    width: 100%;
-    height: 350px;
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    /* Centra orizzontalmente */
-    align-items: center;
-    /* Centra verticalmente */
-    background-color: #d9d9d99d;
-}
-
-.result-gradient-overlay h1 {
-    margin: 0;
-    border-bottom: 2px solid #730505;
-    border-top: 2px solid #730505;
-    color: #730505;
-    font-size: 40px;
-}
-
-.result-prev,
-.result-next {
-    color: #4680EB !important;
-    top: 45%;
-    padding: 5px;
-    background-color: rgba(161, 161, 161, 0.375);
-}
-
-.result-prev:hover,
-.result-next:hover {
-    color: rgb(46, 80, 145) !important;
-    padding: 5px;
-    background-color: rgba(161, 161, 161, 0.596);
-    transition: 0.3s;
-    font-weight: bold;
-}
-
-.result-pagination .swiper-pagination-bullet {
-    background-color: #4680EB;
-    width: 10px;
-    height: 10px;
-    align-content: center;
-}
-
-.result-pagination .swiper-pagination-bullet-active {
-    background-color: #4680EB;
-    width: 15px;
-    height: 15px;
-    align-content: center;
-}
-
-
-/*------------------------concerti-------------------------------*/
-
-.label {
-    padding: 0 3rem;
-    font-size: 40px;
-    color: #4680EB;
-}
-
-.teatro-container,
-.tour-container,
-.partite-container,
-.concerto-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 35px 0;
-    background-color: #E7E7E7;
-}
-
-@media screen and (max-width: 1024px) {
-    .label {
-        font-size: 2rem;
-        padding: 0 1.5rem;
-    }
-
-    .card-result {
-        width: 250px;
-        height: 350px;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .label {
-        font-size: 20px;
-        padding: 0 1rem;
-    }
-
-    .card-result {
-        width: 280px;
-        height: 380px;
-        margin-bottom: 100px;
-    }
-
-    .concerti-container,
-    .teatro-container,
-    .tour-container,
-    .partite-container {
-        flex-direction: column;
-        /* Disposizione verticale per schermi piccoli */
-        align-items: center;
-    }
-
-    .swiper-button-next,
-    .swiper-button-prev {
-        display: none;
-    }
-
-    .swiper-pagination-bullet,
-    .swiper-pagination-bullet-active {
-        display: none;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .label {
-        font-size: 18px;
-        text-align: center;
-    }
-
-    .card-result {
-        width: 180px;
-        height: 280px;
-    }
 }
 
 /*----------------------footer-----------------------*/

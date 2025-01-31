@@ -17,8 +17,8 @@ function loadPosts(categoria, containerClass, slideId) {
                     ? '<div class="result-gradient-overlay"><h1>SOLD OUT</h1></div>'
                     : '';
 
-                console.log("Post ricevuto:", post); // Controlla l'intero oggetto
-                console.log("Valore di soldOut:", post.soldOut);
+                // console.log("Post ricevuto:", post); // Controlla l'intero oggetto
+                // console.log("Valore di soldOut:", post.soldOut);
 
 
                 output += `

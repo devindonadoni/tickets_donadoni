@@ -6,12 +6,17 @@ session_start();
 $utente = "";
 if (isset($_SESSION['user'])) {
     $utente = $_SESSION['user'];
+    $idUtente = $_SESSION['idUtente'];
+
+    $sql = "SELECT COUNT(*) AS count FROM tcarrello WHERE pagata = 0 AND disponibile = 1 AND idUtente = '$idUtente'";
+    $result = mysqli_query($db_remoto, $sql);
+
+    if ($result) {
+        $row = mysqli_fetch_assoc($result);
+        $countCart = $row['count'];
+    }
 
 }
-if (!$db_remoto) {
-    die("Errore di connessione: " . mysqli_connect_error());
-}
-
 $idEvento = $_GET['idEvento'];
 
 $sql = "SELECT 
@@ -40,6 +45,8 @@ $result = mysqli_query($db_remoto, $sql);
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <script src="https://kit.fontawesome.com/1c5c930d58.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <link rel="stylesheet" href="styles/style-postview.css">
 </head>
@@ -53,7 +60,20 @@ $result = mysqli_query($db_remoto, $sql);
                 <div class="nav-links" id="navlinks">
                     <i class="fa fa-times-circle" onclick="hideMenu()" style="display: none;" id="fa-times-circle"></i>
                     <ul>
-                        <li><a href="cart.php"><i class="fa-solid fa-heart"></i></a></li>
+                        <li>
+                            <a href="cart.php" class="cart-wrapper">
+                                <i class="fa-solid fa-heart"></i>
+                                <?php
+                                if ($utente) {
+                                    if ($result) {
+                                        echo '<span class="cart-count">';
+                                        echo $countCart;
+                                        echo '</span> <!-- Numero hardcoded -->';
+                                    }
+                                }
+                                ?>
+                            </a>
+                        </li>
                         <?php
                         if ($utente != "") {
                             echo '<li><a href="profilo.php"><i class="fa-solid fa-user"></i></a></li>';
@@ -330,9 +350,7 @@ $result = mysqli_query($db_remoto, $sql);
 
 
 
-        // Funzione per inviare la prenotazione tramite fetch
         async function sendBooking() {
-
             const idUtente = "<?php echo isset($_SESSION['idUtente']) ? $_SESSION['idUtente'] : ''; ?>";  // Recupera l'ID utente dalla sessione PHP
 
             if (!idUtente) {
@@ -353,7 +371,7 @@ $result = mysqli_query($db_remoto, $sql);
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        idEvento: dataPrenotazione.idEvento(),  // Aggiungi idEvento
+                        idEvento: dataPrenotazione.idEvento(),
                         idSettore: dataPrenotazione.idSettore(),
                         quantita: dataPrenotazione.quantita()
                     }),
@@ -361,7 +379,12 @@ $result = mysqli_query($db_remoto, $sql);
 
                 const result = await response.json();
                 if (result.success) {
-                    alert("Verifica posti completa!");
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Verifica posti completata!',
+                        text: 'I posti sono disponibili.',
+                        confirmButtonText: 'Ok'
+                    });
 
                     try {
                         const responsePren = await fetch('api/prenotazioni/creaPrenotazione.php', {
@@ -370,36 +393,62 @@ $result = mysqli_query($db_remoto, $sql);
                                 'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
-                                idEvento: dataPrenotazione.idEvento(),  // Aggiungi idEvento
+                                idEvento: dataPrenotazione.idEvento(),
                                 idSettore: dataPrenotazione.idSettore(),
                                 quantita: dataPrenotazione.quantita()
                             }),
                         });
 
-
                         const resultPren = await responsePren.json();
                         if (resultPren.success) {
-                            alert("Prenotazione completata con successo!");
-
-                            window.location.href = 'check-out.php';
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Prenotazione completata!',
+                                text: 'La tua prenotazione è stata effettuata con successo.',
+                                confirmButtonText: 'Vai al carrello',
+                            }).then(() => {
+                                if(result.isConfirmed){
+                                    window.location.href = 'cart.php';
+                                }else{
+                                    window.location.href = 'index.php'
+                                }
+                            });
                         } else {
-                            alert(resultPren.message || "Errore nella prenotazione.");
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Errore nella prenotazione',
+                                text: resultPren.message || "Si è verificato un errore.",
+                                confirmButtonText: 'Ok'
+                            });
                         }
                     } catch (error) {
                         console.error("Errore durante la richiesta:", error);
-                        alert("Errore di connessione all'API.");
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Errore di connessione',
+                            text: 'Errore durante la connessione al server',
+                            confirmButtonText: 'Ok'
+                        });
                     }
-
-
-                    window.location.href = 'cart.php';
                 } else {
-                    alert(result.message || "Errore nella prenotazione.");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Errore nella richiesta',
+                        text: "Nessun Settore selezionato o disponibile per questo evento",
+                        confirmButtonText: 'Ok'
+                    });
                 }
             } catch (error) {
                 console.error("Errore durante la richiesta:", error);
-                alert("Errore di connessione all'API.");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Errore di connessione',
+                    text: 'Errore durante la connessione all\'API.',
+                    confirmButtonText: 'Ok'
+                });
             }
         }
+
 
         // Aggiungi l'evento di prenotazione (può essere un pulsante "Prenota" o simile)
         const checkoutBtn = document.querySelector('.checkout-button');
