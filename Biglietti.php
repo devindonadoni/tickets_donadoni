@@ -14,8 +14,6 @@ if (isset($_SESSION['user'])) {
     $row = mysqli_fetch_assoc($result);
     $countCart = $row['count'];
   }
-
-  echo $idUtente;
 }
 ?>
 
@@ -35,9 +33,11 @@ if (isset($_SESSION['user'])) {
 
   <!-- Swiper CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script src="script/load-tickets.js"></script>
 
-  <link rel="stylesheet" href="styles/style-index.css">
   <link rel="stylesheet" href="styles/style-tickets.css">
+  <link rel="stylesheet" href="styles/style-footer.css">
+
 </head>
 
 <body>
@@ -148,6 +148,7 @@ if (isset($_SESSION['user'])) {
 
     <div class="grid-container">
       <div class="wrapper_tab-content">
+
         <div id="item1" class="tab-content content-visible">
           <!-- Filtri -->
           <div class="container-filter">
@@ -165,37 +166,14 @@ if (isset($_SESSION['user'])) {
             </div>
             <div class="single-filter">
               <p>Posto</p>
-              <i class="fa-solid fa-chevron-down"></i>
             </div>
             <div class="single-filter">
               <p>Totale</p>
-              <i class="fa-solid fa-chevron-down"></i>
             </div>
           </div>
 
           <!-- Eventi -->
           <div class="container-event">
-            <div class="event-info">
-              <h1>TRAVIS SCOTT</h1> <!-- Colonna 1: Evento -->
-              <p>ROMA | STADIO OLIMPICO</p> <!-- Colonna 2: Luogo -->
-              <p>10 AGOSTO 2024</p> <!-- Colonna 3: Data -->
-              <p>Tribuna Ce2</p> <!-- Colonna 4: Posto -->
-              <div class="total"> <!-- Colonna 5: Totale -->
-                <p>€370,00</p>
-                <i class="fa-solid fa-download"></i>
-              </div>
-            </div>
-
-            <div class="event-info">
-              <h1>TRAVIS SCOTT</h1> <!-- Colonna 1: Evento -->
-              <p>ROMA | STADIO OLIMPICO</p> <!-- Colonna 2: Luogo -->
-              <p>10 AGOSTO 2024</p> <!-- Colonna 3: Data -->
-              <p>Tribuna Ce3</p> <!-- Colonna 4: Posto -->
-              <div class="total"> <!-- Colonna 5: Totale -->
-                <p>€370,00</p>
-                <i class="fa-solid fa-download"></i>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -220,49 +198,141 @@ if (isset($_SESSION['user'])) {
             </div>
             <div class="single-filter">
               <p>Posto</p>
-              <i class="fa-solid fa-chevron-down"></i>
             </div>
             <div class="single-filter">
               <p>Totale</p>
-              <i class="fa-solid fa-chevron-down"></i>
             </div>
           </div>
 
           <!-- Eventi -->
-          <div class="container-event">
-            <div class="event-info">
-              <h1>TRAVIS SCOTT</h1> <!-- Colonna 1: Evento -->
-              <p>ROMA | STADIO OLIMPICO</p> <!-- Colonna 2: Luogo -->
-              <p>10 AGOSTO 2024</p> <!-- Colonna 3: Data -->
-              <p>Tribuna Ce4</p> <!-- Colonna 4: Posto -->
-              <div class="total"> <!-- Colonna 5: Totale -->
-                <p>€370,00</p>
-                <i class="fa-solid fa-download"></i>
-              </div>
-            </div>
+          <div class="container-event"></div>
+        </div>
 
-            <div class="event-info">
-              <h1>TRAVIS SCOTT</h1> <!-- Colonna 1: Evento -->
-              <p>ROMA | STADIO OLIMPICO</p> <!-- Colonna 2: Luogo -->
-              <p>10 AGOSTO 2024</p> <!-- Colonna 3: Data -->
-              <p>Tribuna Ce5</p> <!-- Colonna 4: Posto -->
-              <div class="total"> <!-- Colonna 5: Totale -->
-                <p>€370,00</p>
-                <i class="fa-solid fa-download"></i>
-              </div>
+
+        <!-- event 3-->
+        <div id="item3" class="tab-content">
+          <!-- Filtri -->
+          <div class="container-filter">
+            <div class="single-filter">
+              <p>Evento</p>
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="single-filter">
+              <p>Luogo</p>
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="single-filter">
+              <p>Data</p>
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="single-filter">
+              <p>Posto</p>
+            </div>
+            <div class="single-filter">
+              <p>Totale</p>
+            </div>
+          </div>
+
+          <!-- Eventi -->
+          <div class="container-event"></div>
+        </div>
+
+
+
+
+
+        <!-- event 4-->
+        <div id="item4" class="tab-content">
+          <!-- Filtri -->
+          <div class="container-filter">
+            <div class="single-filter">
+              <p>Evento</p>
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="single-filter">
+              <p>Luogo</p>
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="single-filter">
+              <p>Data</p>
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="single-filter">
+              <p>Posto</p>
+            </div>
+            <div class="single-filter">
+              <p>Totale</p>
+            </div>
+          </div>
+
+          <!-- Eventi -->
+          <div class="container-event"></div>
+        </div>
+      </div>
+    </div> <!--  grid-container -->
+
+
+    <div class="pay">
+      <div class="method-payment">
+        <img src="images/cartadeocente.png" alt="">
+        <img src="images/cartecultura.png" alt="">
+        <img src="images/paypall-removebg-preview.png" alt="">
+        <img src="images/mastercard-removebg-preview.png" alt="">
+        <img src="images/visa-removebg-preview.png" alt="">
+      </div>
+    </div>
+
+    <!-- Wrapper esterno per il footer -->
+    <div class="footer-wrapper">
+      <footer class="footer">
+        <div class="footer-decor-top">
+          <div class="top-left"></div>
+          <div class="top-center"></div>
+          <div class="top-right"></div>
+        </div>
+        <div class="footer-content">
+          <div class="footer-section about">
+            <h3>La Tua Azienda</h3>
+            <p>Siamo una compagnia impegnata a portare innovazione e creatività nel mondo digitale.</p>
+          </div>
+
+          <div class="footer-section links">
+            <h3>Link Utili</h3>
+            <ul>
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Servizi</a></li>
+              <li><a href="#">Chi Siamo</a></li>
+              <li><a href="#">Contatti</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section contact">
+            <h3>Contatti</h3>
+            <p><strong>Email:</strong> info@azienda.com</p>
+            <p><strong>Telefono:</strong> +39 012 345 6789</p>
+          </div>
+
+          <div class="footer-section social">
+            <h3>Seguici</h3>
+            <div class="social-icons">
+              <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
             </div>
           </div>
         </div>
-      </div>
+        <div class="footer-decor">
+          <div class="wave"></div>
+          <div class="circle"></div>
+        </div>
+      </footer>
     </div>
+
   </div>
 </body>
 
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<script src="script/load-events.js"></script>
-<script src="script/script.js"></script>
-<script src="script/search.js"></script>
 <script src="script/profile-menu.js"></script>
+<script src="script/universal-scripts.js"></script>
 
 <script>
   function getTab(el) {
@@ -279,8 +349,20 @@ if (isset($_SESSION['user'])) {
 
   document.addEventListener("click", (e) => {
     if (e.target.matches(".tab-item a")) {
+      document.body.scrollTop = 0; // Per Safari
+      document.documentElement.scrollTop = 0; // Per Chrome, Firefox, IE, Edge
       getTab(e.target);
     }
+  });
+
+
+  document.querySelectorAll(".single-filter").forEach(filter => {
+    filter.addEventListener("click", function () {
+      let icon = this.querySelector("i");
+      if (icon) {
+        icon.classList.toggle("rotated");
+      }
+    });
   });
 </script>
 

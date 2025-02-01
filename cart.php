@@ -23,6 +23,8 @@ if (isset($_SESSION['user'])) {
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="styles/style-index.css">
     <link rel="stylesheet" href="styles/style-cart.css">
+    <link rel="stylesheet" href="styles/style-footer.css">
+
 </head>
 
 <body>

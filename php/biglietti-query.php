@@ -20,7 +20,7 @@ try {
     $database = new Database();
     $conn = $database->getConnection();
 
-    // Query per recuperare le prenotazioni dell'utente
+    // Query per recuperare le prenotazioni dell'utente, includendo il nomeSettore
     $query = "
         SELECT 
             p.idPrenotazione,
@@ -33,11 +33,13 @@ try {
             e.idLuogo,
             l.citta,
             l.locazione,
-            po.numeroPosto
+            po.numeroPosto,
+            s.nomeSettore
         FROM tPrenotazione p
         LEFT JOIN tEvento e ON p.idEvento = e.idEvento
         LEFT JOIN tLuogo l ON e.idLuogo = l.idLuogo
         LEFT JOIN tPosto po ON p.idPosto = po.idPosto
+        LEFT JOIN tSettore s ON po.idSettore = s.idSettore  -- Aggiungi il join con tSettore
         WHERE p.idUtente = :idUtente
     ";
 
@@ -59,7 +61,8 @@ try {
             'nomeEvento' => $prenotazione['nomeEvento'],
             'dataOraEvento' => $prenotazione['dataOraEvento'],
             'citta' => $prenotazione['citta'],
-            'locazione' => $prenotazione['locazione']
+            'locazione' => $prenotazione['locazione'],
+            'nomeSettore' => $prenotazione['nomeSettore'] // Aggiungi il nomeSettore
         ];
     }
 

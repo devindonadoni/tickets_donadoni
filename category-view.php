@@ -20,6 +20,8 @@ if (isset($_SESSION['user'])) {
     <script src="https://kit.fontawesome.com/1c5c930d58.js" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="styles/style-index.css">
+    <link rel="stylesheet" href="styles/style-footer.css">
+
 </head>
 
 <body>

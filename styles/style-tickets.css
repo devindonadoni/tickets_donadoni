@@ -1,4 +1,307 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #E7E7E7;
+
+}
+
+a {
+  text-decoration: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Contenitore principale */
+.main-container {
+  max-width: 1800px;
+  /* Larghezza massima del contenitore */
+  margin: 0 auto; 
+  /* Centra il contenitore */
+  width: 100%;
+}
+
+/* Sezione Header */
+.header {
+  height: 10vh;
+  width: 100%;
+  background: linear-gradient(#4680EB, #4680eb00, #4680eb00);
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  /* Header sopra l'immagine */
+}
+
+/* Navbar */
+.primary-nav {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4rem;
+}
+
+.primary-nav img {
+  max-width: 180px;
+}
+
+.nav-links {
+  text-align: right;
+}
+
+.nav-links ul {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 30px;
+}
+
+.nav-links ul li {
+  list-style: none;
+}
+
+.nav-links ul li a {
+  text-decoration: none;
+  font-size: 18px;
+  color: white;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-links ul li a::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200%;
+  height: 120%;
+  background: white;
+  border-radius: 5px;
+  z-index: -1;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.nav-links ul li a:hover::before {
+  opacity: 1;
+}
+
+.nav-links ul li a:hover {
+  color: #4680EB;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Navbar mobile responsive */
+nav .fa {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  * {
+      margin: 0;
+      padding: 0;
+  }
+
+  body {
+      overflow-x: hidden;
+      margin: 0;
+      left: 0;
+      width: 55vh;
+  }
+
+  .nav-links {
+      position: absolute;
+      background: #4680EB;
+      height: 100vh;
+      width: 200px;
+      top: 0;
+      right: -200px;
+      text-align: left;
+      z-index: 2;
+      transition: right 0.3s ease;
+  }
+
+  .nav-links ul {
+      flex-direction: column;
+      /* Cambia i link in colonna */
+      gap: 15px;
+      padding: 30px;
+  }
+
+  .nav-links ul li {
+      display: block;
+  }
+
+  nav .fa {
+      display: block;
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+  }
+
+  .primary-nav {
+      padding: 0 2rem;
+      /* Riduce i margini laterali su schermi piccoli */
+  }
+}
+
+/* Margini dinamici */
+@media (min-width: 1600px) {
+  .main-container {
+      max-width: 1400px;
+      /* Aumenta la larghezza del contenitore su schermi grandi */
+  }
+}
+
+@media (max-width: 768px) {
+  .main-container {
+      width: 95%;
+      /* Riduce i margini su schermi più piccoli */
+  }
+}
+
+.cart-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.cart-count {
+  position: absolute;
+  top: -5px; /* Posiziona sopra l'icona */
+  right: -10px; /* Allinea a destra */
+  background-color: red; /* Colore del cerchio */
+  color: white; /* Colore del numero */
+  font-size: 12px; /* Dimensione del numero */
+  width: 18px; /* Dimensione del cerchio */
+  height: 18px; /* Dimensione del cerchio */
+  border-radius: 50%; /* Rende il cerchio */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Effetto ombra */
+}
+
+
+.profile-icon {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%; 
+  margin-top: 10px;
+  padding: 10px 0;
+  right: -2rem;
+  background-color: #E7E7E7;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  width: auto;
+}
+
+.name-container{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  padding: 0;
+  font-size: 13px;
+  overflow: hidden;
+}
+
+.name-container h1{
+  color: #4680EB;
+  margin-bottom: 0;
+}
+
+.name-container p{
+  margin: 1px 5px;
+  opacity: 50%;
+}
+
+.dropmenu-element {
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  gap: 20px;
+  background-color: #E7E7E7;
+  color: #000000;
+  opacity: 80%;
+  padding-left: 10px;
+  border-top: 2px solid rgba(0, 0, 0, 0.300);
+  font-size: 13px;
+  margin: 0 10px;
+}
+
+.dropmenu-element i{
+  opacity: 50%;
+}
+
+.dropmenu-element-signout{
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  gap: 20px;
+  color: #000000;
+  opacity: 80%;
+  padding-left: 10px;
+  border-top: 2px solid rgba(0, 0, 0, 0.300);
+  font-size: 14px;
+  margin: 0 10px;
+  color: #730505;
+  font-weight: bold;
+  transition: 1s ease-in-out;
+}
+
+
+/* Mostra il dropdown menu quando si passa il mouse sull'icona del profilo */
+.profile-icon:hover .dropdown-menu {
+  display: block;
+}
+
+
+.dropmenu-element:hover{
+  color: #4680EB;
+  font-weight: bold;
+  opacity: 100%;
+}
+
+.dropdown-menu::before {
+  content: "";
+  position: absolute;
+  top: -8px; /* Posiziona il triangolo sopra il menu */
+  right: 2rem; /* Allinea il triangolo al profilo */
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid #E7E7E7; /* Colore dello sfondo del menu */
+}
+
+
+
+
+/* -----------------------------------------body------------------------------ */
+
+
+
+.label {
+  padding: 0 3rem;
+  font-size: 40px;
+  color: #4680EB;
+}
 
 a {
   text-decoration: none;
@@ -80,6 +383,7 @@ a {
 .tab-content {
   visibility: hidden;
   height: 0;
+  overflow-x: hidden;
   opacity: 0;
   transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
   transform: translateY(10px);
@@ -145,7 +449,6 @@ a {
   background-color: rgb(222, 222, 222);
   border-radius: 10px;
   padding: 1rem 10px;
-  width: 100%;
   /* Occupa tutta la larghezza disponibile */
 }
 
@@ -170,4 +473,22 @@ a {
 .total i {
   color: #4680EB;
   cursor: pointer;
+}
+
+
+.no-booking{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 5rem auto;
+}
+
+
+.single-filter i {
+  transition: transform 0.5s ease-in-out;
+}
+
+.rotated {
+  transform: rotate(180deg);
 }
