@@ -5,38 +5,79 @@ a {
   color: inherit;
 }
 
-.container-label{
+.container-label {
   width: auto;
   margin: 0 3rem;
 }
 
-ul {
+.container-label ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
-  gap: 80px;
+  gap: 60px;
   height: 30px;
+  align-items: center;
   border-bottom: 2px solid rgba(0, 0, 0, 0.308);
+  padding: 3px 0;
 }
 
-li a {
+.search-item {
+  margin-left: auto;
+  /* Spinge l'elemento di ricerca a destra */
+}
+
+.search-item a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #a4a4a4;
+  /* Colore dell'icona */
 }
 
-li:not(:has([class=active]))  a:hover {
+.search-item a:hover {
+  color: #777676;
+  /* Cambia colore al passaggio del mouse */
+}
+
+.container-label li:not(:has([class=active])) a {
+  color: #777676;
+  /* Cambia colore al passaggio del mouse */
+}
+
+.container-label li:not(:has([class=active])) a:hover {
   padding-bottom: 6px;
   color: #777676;
   border-bottom: 2px solid #777676;
 }
 
+.active {
+  color: #4680EB;
+  padding-bottom: 6px;
+  border-bottom: 3px solid #4680EB;
+}
+
+/*------------------------------filter-------------------------------*/
+
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  /* 5 colonne, una per ogni filtro */
+  gap: 10px;
+  /* Spazio tra le colonne */
+  margin: 1rem 3rem;
+  /* Allineamento con il resto del contenuto */
+}
+
 .wrapper_tab-content {
   position: relative;
+  width: 100%;
+  margin: 1rem 0;
+  /* Rimuovi il margine laterale fisso */
 }
 
 .tab-content {
-  position: absolute;
-  padding: 1.75em 0;
   visibility: hidden;
   height: 0;
   opacity: 0;
@@ -50,15 +91,83 @@ li:not(:has([class=active]))  a:hover {
   height: auto;
   opacity: 1;
   transform: translateY(0);
+  display: flex;
+  flex-direction: column;
+  /* I contenuti sono disposti in colonna */
+  gap: 10px;
+  /* Spazio tra gli eventi */
+  width: 100%;
+  /* Occupa tutta la larghezza disponibile */
 }
 
-.tab-content h1 {
-  font-size: 1.12em;
-  margin-bottom: 0.5em;
+.container-filter {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  /* 5 colonne, una per ogni filtro */
+  gap: 10px;
+  /* Spazio tra le colonne */
+  width: 100%;
+  /* Occupa tutta la larghezza disponibile */
 }
 
-.active {
+.single-filter {
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 17px;
+  border: 2px solid rgba(0, 0, 0, 0);
+}
+
+.single-filter p{
+  margin: 0;
+  padding: 0;
+}
+
+.single-filter:hover {
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+  border-bottom: 2px solid #1861ce;
+}
+
+.container-event {
+  display: contents;
+  /* I figli di .container-event partecipano alla griglia */
+}
+
+.event-info {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  /* 5 colonne, come i filtri */
+  gap: 10px;
+  /* Spazio tra le colonne */
+  align-items: center;
+  background-color: rgb(222, 222, 222);
+  border-radius: 10px;
+  padding: 1rem 10px;
+  width: 100%;
+  /* Occupa tutta la larghezza disponibile */
+}
+
+.event-info h1,
+.event-info p {
+  margin: 0;
+  font-size: 0.9em;
+}
+
+.total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.total p {
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+
+.total i {
   color: #4680EB;
-  padding-bottom: 6px;
-  border-bottom: 3px solid #4680EB;
+  cursor: pointer;
 }
