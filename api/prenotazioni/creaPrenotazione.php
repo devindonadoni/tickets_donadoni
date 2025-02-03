@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conn->beginTransaction();
 
         // Verifica disponibilità settore e prezzo
-        $query = "SELECT numerato, postiTotali, prezzo FROM tSettore WHERE idSettore = :idSettore";
+        $query = "SELECT numerato, postiTotali, prezzo FROM tsettore WHERE idSettore = :idSettore";
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':idSettore', $idSettore, PDO::PARAM_INT);
         $stmt->execute();
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Riduci i posti disponibili nel settore
-        $queryUpdate = "UPDATE tSettore SET postiTotali = postiTotali - :quantita WHERE idSettore = :idSettore";
+        $queryUpdate = "UPDATE tsettore SET postiTotali = postiTotali - :quantita WHERE idSettore = :idSettore";
         $stmtUpdate = $conn->prepare($queryUpdate);
         $stmtUpdate->bindParam(':quantita', $quantita, PDO::PARAM_INT);
         $stmtUpdate->bindParam(':idSettore', $idSettore, PDO::PARAM_INT);
@@ -50,16 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Se il settore è numerato, trova un posto disponibile
             $idPosto = null;
             if ((bool)$settore['numerato']) {
-                $queryPosto = "SELECT idPosto FROM tPosto WHERE idSettore = :idSettore AND disponibile = 1 LIMIT 1";
-                $stmtPosto = $conn->prepare($queryPosto);
-                $stmtPosto->bindParam(':idSettore', $idSettore, PDO::PARAM_INT);
-                $stmtPosto->execute();
-                $posto = $stmtPosto->fetch(PDO::FETCH_ASSOC);
+                $queryPosto = "SELECT idPosto FROM tposto WHERE idSettore = :idSettore AND disponibile = 1 LIMIT 1";
+                $stmtposto = $conn->prepare($queryPosto);
+                $stmtposto->bindParam(':idSettore', $idSettore, PDO::PARAM_INT);
+                $stmtposto->execute();
+                $posto = $stmtposto->fetch(PDO::FETCH_ASSOC);
 
                 if ($posto) {
                     // Associa il posto all'utente
                     $idPosto = $posto['idPosto'];
-                    $queryUpdatePosto = "UPDATE tPosto SET disponibile = 0, idUtente = :idUtente WHERE idPosto = :idPosto";
+                    $queryUpdatePosto = "UPDATE tposto SET disponibile = 0, idUtente = :idUtente WHERE idPosto = :idPosto";
                     $stmtUpdatePosto = $conn->prepare($queryUpdatePosto);
                     $stmtUpdatePosto->bindParam(':idUtente', $idUtente, PDO::PARAM_INT);
                     $stmtUpdatePosto->bindParam(':idPosto', $idPosto, PDO::PARAM_INT);
@@ -72,15 +72,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             // Aggiungi la prenotazione
-            $queryPrenotazione = "INSERT INTO tPrenotazione (idEvento, idSettore, idUtente, prezzo, statoPrenotazione, idPosto, dataPrenotazione)
+            $queryPrenotazione = "INSERT INTO tprenotazione (idEvento, idSettore, idUtente, prezzo, statoPrenotazione, idPosto, dataPrenotazione)
                                   VALUES (:idEvento, :idSettore, :idUtente, :prezzo, 'in elaborazione', :idPosto, NOW())";
-            $stmtPrenotazione = $conn->prepare($queryPrenotazione);
-            $stmtPrenotazione->bindParam(':idEvento', $idEvento, PDO::PARAM_INT);
-            $stmtPrenotazione->bindParam(':idSettore', $idSettore, PDO::PARAM_INT);
-            $stmtPrenotazione->bindParam(':idUtente', $idUtente, PDO::PARAM_INT);
-            $stmtPrenotazione->bindParam(':prezzo', $settore['prezzo'], PDO::PARAM_STR);
-            $stmtPrenotazione->bindParam(':idPosto', $idPosto, PDO::PARAM_INT);
-            $stmtPrenotazione->execute();
+            $stmtprenotazione = $conn->prepare($queryPrenotazione);
+            $stmtprenotazione->bindParam(':idEvento', $idEvento, PDO::PARAM_INT);
+            $stmtprenotazione->bindParam(':idSettore', $idSettore, PDO::PARAM_INT);
+            $stmtprenotazione->bindParam(':idUtente', $idUtente, PDO::PARAM_INT);
+            $stmtprenotazione->bindParam(':prezzo', $settore['prezzo'], PDO::PARAM_STR);
+            $stmtprenotazione->bindParam(':idPosto', $idPosto, PDO::PARAM_INT);
+            $stmtprenotazione->execute();
 
             // Salva l'ID della prenotazione
             $prenotazioniIds[] = $conn->lastInsertId();
@@ -89,13 +89,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Inserisci nel carrello per ciascuna prenotazione
         // Inserisci nel carrello per ciascuna prenotazione
         foreach ($prenotazioniIds as $idPrenotazione) {
-            $queryCarrello = "INSERT INTO tCarrello (idPrenotazione, dataAggiunta, idUtente, pagata, idEvento, disponibile)
+            $queryCarrello = "INSERT INTO tcarrello (idPrenotazione, dataAggiunta, idUtente, pagata, idEvento, disponibile)
                             VALUES (:idPrenotazione, NOW(), :idUtente, false, :idEvento, true)";
-            $stmtCarrello = $conn->prepare($queryCarrello);
-            $stmtCarrello->bindParam(':idPrenotazione', $idPrenotazione, PDO::PARAM_INT);
-            $stmtCarrello->bindParam(':idUtente', $idUtente, PDO::PARAM_INT);
-            $stmtCarrello->bindParam(':idEvento', $idEvento, PDO::PARAM_INT); // Aggiungi idEvento
-            $stmtCarrello->execute();
+            $stmtcarrello = $conn->prepare($queryCarrello);
+            $stmtcarrello->bindParam(':idPrenotazione', $idPrenotazione, PDO::PARAM_INT);
+            $stmtcarrello->bindParam(':idUtente', $idUtente, PDO::PARAM_INT);
+            $stmtcarrello->bindParam(':idEvento', $idEvento, PDO::PARAM_INT); // Aggiungi idEvento
+            $stmtcarrello->execute();
         }
 
 

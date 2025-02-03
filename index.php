@@ -70,7 +70,7 @@ if (isset($_SESSION['user'])) {
                         if ($utente != "") {
                             $nomeUtente = "";
                             $emailUtente = "";
-                            $sqlNome = "SELECT * FROM tUtente WHERE idUtente = '$idUtente'";
+                            $sqlNome = "SELECT * FROM tutente WHERE idUtente = '$idUtente'";
                             $resultNome = mysqli_query($db_remoto, $sqlNome);
 
 

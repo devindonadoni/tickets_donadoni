@@ -15,7 +15,7 @@ if (isset($_POST['credential'])) {
         $email = $userInfo['email'];
 
         // Controlla se l'utente esiste
-        $query = "SELECT idUtente FROM tUtente WHERE email = ?";
+        $query = "SELECT idUtente FROM tutente WHERE email = ?";
         $stmt = mysqli_prepare($db_remoto, $query);
         mysqli_stmt_bind_param($stmt, "s", $email);
         mysqli_stmt_execute($stmt);
@@ -36,7 +36,7 @@ if (isset($_POST['credential'])) {
                 exit;
         } else {
             // // Se non esiste, lo registriamo
-            // $query = "INSERT INTO tUtente (email) VALUES (?)";
+            // $query = "INSERT INTO tutente (email) VALUES (?)";
             // $stmt = mysqli_prepare($db_remoto, $query);
             // mysqli_stmt_bind_param($stmt, "s", $email);
             // mysqli_stmt_execute($stmt);

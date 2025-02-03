@@ -27,7 +27,7 @@ foreach ($prenotazioni as $carrello) {
     $idEvento = $carrello['idEvento'];
     $dataAggiunta = $carrello['dataAggiunta'];
 
-    // Recupera il prezzo e idSettore dalla tabella tPrenotazione
+    // Recupera il prezzo e idSettore dalla tabella tprenotazione
     $sql = "
         SELECT pr.prezzo, pr.idSettore, pr.idPosto
         FROM tprenotazione pr

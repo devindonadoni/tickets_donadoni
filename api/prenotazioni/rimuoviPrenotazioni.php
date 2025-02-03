@@ -27,40 +27,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Cambiare il valore del campo disponibile = false nella tabella tcarrello
         $sqlCarrello = "UPDATE tcarrello SET disponibile = false WHERE idPrenotazione = :idPrenotazione";
-        $stmtCarrello = $conn->prepare($sqlCarrello);
-        $stmtCarrello->bindParam(':idPrenotazione', $idPrenotazione, PDO::PARAM_INT);
-        $stmtCarrello->execute();
+        $stmtcarrello = $conn->prepare($sqlCarrello);
+        $stmtcarrello->bindParam(':idPrenotazione', $idPrenotazione, PDO::PARAM_INT);
+        $stmtcarrello->execute();
 
-        // Recuperare l'idPosto e idSettore dalla tabella tPrenotazione
+        // Recuperare l'idPosto e idSettore dalla tabella tprenotazione
         $sqlPrenotazione = "SELECT idPosto, idSettore FROM tprenotazione WHERE idPrenotazione = :idPrenotazione";
-        $stmtPrenotazione = $conn->prepare($sqlPrenotazione);
-        $stmtPrenotazione->bindParam(':idPrenotazione', $idPrenotazione, PDO::PARAM_INT);
-        $stmtPrenotazione->execute();
-        $prenotazione = $stmtPrenotazione->fetch(PDO::FETCH_ASSOC);
+        $stmtprenotazione = $conn->prepare($sqlPrenotazione);
+        $stmtprenotazione->bindParam(':idPrenotazione', $idPrenotazione, PDO::PARAM_INT);
+        $stmtprenotazione->execute();
+        $prenotazione = $stmtprenotazione->fetch(PDO::FETCH_ASSOC);
 
         if ($prenotazione) {
             $idPosto = $prenotazione['idPosto'];
             $idSettore = $prenotazione['idSettore'];
 
-            // Se idPosto non è null, impostare disponibile = true e rimuovere idUtente in tPosto
+            // Se idPosto non è null, impostare disponibile = true e rimuovere idUtente in tposto
             if (!is_null($idPosto)) {
                 $sqlPosto = "UPDATE tposto SET disponibile = true, idUtente = NULL WHERE idPosto = :idPosto";
-                $stmtPosto = $conn->prepare($sqlPosto);
-                $stmtPosto->bindParam(':idPosto', $idPosto, PDO::PARAM_INT);
-                $stmtPosto->execute();
+                $stmtposto = $conn->prepare($sqlPosto);
+                $stmtposto->bindParam(':idPosto', $idPosto, PDO::PARAM_INT);
+                $stmtposto->execute();
             }
 
-            // Impostare statoElaborazione = 'cancellata' in tPrenotazione
+            // Impostare statoElaborazione = 'cancellata' in tprenotazione
             $sqlUpdatePrenotazione = "UPDATE tprenotazione SET statoPrenotazione = 'cancellata' WHERE idPrenotazione = :idPrenotazione";
             $stmtUpdatePrenotazione = $conn->prepare($sqlUpdatePrenotazione);
             $stmtUpdatePrenotazione->bindParam(':idPrenotazione', $idPrenotazione, PDO::PARAM_INT);
             $stmtUpdatePrenotazione->execute();
 
-            // Aggiornare postiTotali in tSettore incrementandolo di 1
+            // Aggiornare postiTotali in tsettore incrementandolo di 1
             $sqlSettore = "UPDATE tsettore SET postiTotali = postiTotali + 1 WHERE idSettore = :idSettore";
-            $stmtSettore = $conn->prepare($sqlSettore);
-            $stmtSettore->bindParam(':idSettore', $idSettore, PDO::PARAM_INT);
-            $stmtSettore->execute();
+            $stmtsettore = $conn->prepare($sqlSettore);
+            $stmtsettore->bindParam(':idSettore', $idSettore, PDO::PARAM_INT);
+            $stmtsettore->execute();
 
             echo json_encode(["success" => true, "message" => "Prenotazione cancellata con successo"]);
         } else {

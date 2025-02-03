@@ -1,7 +1,7 @@
 <?php
 // Connessione al database
-$db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
 header("Content-Type: application/json");
+require_once('../api/config/config.php');
 
 
 // Controlla se la connessione ha avuto successo
@@ -22,18 +22,18 @@ if (!empty($categoria)) {
             CASE 
                 WHEN (
                     SELECT COUNT(*) 
-                    FROM tSettore 
+                    FROM tsettore 
                     WHERE idEvento = e.idEvento
                 ) = 0 THEN 1 -- Nessun settore associato
                 WHEN (
                     SELECT SUM(postiTotali) 
-                    FROM tSettore 
+                    FROM tsettore 
                     WHERE idEvento = e.idEvento
                 ) = 0 THEN 1 -- Somma dei posti disponibili è zero
                 ELSE 0
             END AS soldOut
-        FROM tEvento e 
-        JOIN tLuogo l ON e.idLuogo = l.idLuogo 
+        FROM tevento e 
+        JOIN tluogo l ON e.idLuogo = l.idLuogo 
         WHERE e.categoria = '$categoria'";
 }
 

@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!empty($email) && !empty($password)) {
         // Query per verificare email e password e ottenere anche l'idUtente
-        $query = "SELECT idUtente, email FROM tUtente WHERE email = ? AND password = ?";
+        $query = "SELECT idUtente, email FROM tutente WHERE email = ? AND password = ?";
         $stmt = mysqli_prepare($db_remoto, $query);
 
         if ($stmt) {
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $hashedToken = password_hash($token, PASSWORD_DEFAULT); // Hash del token
 
                     // Salva il token nel database
-                    $updateQuery = "UPDATE tUtente SET remember_token = ? WHERE idUtente = ?";
+                    $updateQuery = "UPDATE tutente SET remember_token = ? WHERE idUtente = ?";
                     $updateStmt = mysqli_prepare($db_remoto, $updateQuery);
                     mysqli_stmt_bind_param($updateStmt, "si", $hashedToken, $idUtente);
                     mysqli_stmt_execute($updateStmt);

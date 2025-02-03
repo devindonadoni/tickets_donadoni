@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Controlla se tutti i campi sono compilati
     if (!empty($nome) && !empty($cognome) && !empty($email) && !empty($password)) {
         // Verifica se l'email è già presente nel database
-        $check_email_query = "SELECT * FROM tUtente WHERE email = ?";
+        $check_email_query = "SELECT * FROM tutente WHERE email = ?";
         $stmt_check = mysqli_prepare($db_remoto, $check_email_query);
         if ($stmt_check) {
             mysqli_stmt_bind_param($stmt_check, "s", $email);
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = "L'email è già registrata. Prova con un'altra.";
             } else {
                 // Prepara la query per inserire i dati
-                $query = "INSERT INTO tUtente (nome, cognome, email, password) VALUES (?, ?, ?, ?)";
+                $query = "INSERT INTO tutente (nome, cognome, email, password) VALUES (?, ?, ?, ?)";
                 $stmt = mysqli_prepare($db_remoto, $query);
                 if ($stmt) {
                     // Collega i parametri alla query

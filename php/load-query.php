@@ -1,5 +1,5 @@
 <?php
-$db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
+require_once('../api/config/config.php');
 
 if (!$db_remoto) {
     die("Errore di connessione: " . mysqli_connect_error());
@@ -8,9 +8,9 @@ if (!$db_remoto) {
 $sql = "SELECT 
     *
 FROM 
-    tEvento e
+    tevento e
 JOIN 
-    tLuogo l
+    tluogo l
 ON 
     e.idLuogo = l.idLuogo";
 

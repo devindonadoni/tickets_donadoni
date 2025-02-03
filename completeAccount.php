@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nuovoCognome = $cognome;
             $email = $_SESSION["temp_email"];
 
-            $query = "INSERT INTO tUtente (nome, cognome, email, dataNascita, luogoNascita, codiceFiscale) VALUES (?, ?, ?, ?, ?, ?)";
+            $query = "INSERT INTO tutente (nome, cognome, email, dataNascita, luogoNascita, codiceFiscale) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = mysqli_prepare($db_remoto, $query);
             mysqli_stmt_bind_param($stmt, "ssssss", $nuovoNome, $nuovoCognome, $email, $data_nascita, $luogo_nascita, $codice_fiscale);
             mysqli_stmt_execute($stmt);

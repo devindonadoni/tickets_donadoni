@@ -35,11 +35,11 @@ try {
             l.locazione,
             po.numeroPosto,
             s.nomeSettore
-        FROM tPrenotazione p
-        LEFT JOIN tEvento e ON p.idEvento = e.idEvento
-        LEFT JOIN tLuogo l ON e.idLuogo = l.idLuogo
-        LEFT JOIN tPosto po ON p.idPosto = po.idPosto
-        LEFT JOIN tSettore s ON po.idSettore = s.idSettore  -- Aggiungi il join con tSettore
+        FROM tprenotazione p
+        LEFT JOIN tevento e ON p.idEvento = e.idEvento
+        LEFT JOIN tluogo l ON e.idLuogo = l.idLuogo
+        LEFT JOIN tposto po ON p.idPosto = po.idPosto
+        LEFT JOIN tsettore s ON po.idSettore = s.idSettore  -- Aggiungi il join con tsettore
         WHERE p.idUtente = :idUtente
     ";
 

@@ -1,5 +1,5 @@
 <?php
-$db_remoto = mysqli_connect("localhost", "root", "", "tickets_donadoni");
+require_once('../api/config/config.php');
 
 if (isset($_POST['query']) || isset($_POST['categoria']) || isset($_POST['luogo']) || isset($_POST['data'])) {
     $search = isset($_POST['query']) ? $db_remoto->real_escape_string($_POST['query']) : '';
@@ -7,8 +7,8 @@ if (isset($_POST['query']) || isset($_POST['categoria']) || isset($_POST['luogo'
     $luogo = isset($_POST['citta']) ? $db_remoto->real_escape_string($_POST['citta']) : '';
     $data = isset($_POST['data']) ? $db_remoto->real_escape_string($_POST['data']) : '';
     
-    $query = "SELECT * FROM tEvento e 
-              JOIN tLuogo l ON e.idLuogo = l.idLuogo 
+    $query = "SELECT * FROM tevento e 
+              JOIN tluogo l ON e.idLuogo = l.idLuogo 
               WHERE 1=1";
 
     // Aggiungere i filtri solo se presenti

@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         // Cerca il settore per idSettore
-        $query = "SELECT idSettore, numerato FROM tSettore WHERE idSettore = :idSettore";
+        $query = "SELECT idSettore, numerato FROM tsettore WHERE idSettore = :idSettore";
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':idSettore', $idSettore, PDO::PARAM_INT);
         $stmt->execute();
@@ -31,13 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($settore) {
             if ((bool)$settore['numerato']) {
                 // Se il settore è numerato, trova i posti disponibili
-                $queryPosto = "SELECT idPosto, numeroPosto FROM tPosto WHERE idSettore = :idSettore AND disponibile = 1 LIMIT :quantita";
-                $stmtPosto = $conn->prepare($queryPosto);
-                $stmtPosto->bindParam(':idSettore', $settore['idSettore'], PDO::PARAM_INT);
-                $stmtPosto->bindParam(':quantita', $quantita, PDO::PARAM_INT);
-                $stmtPosto->execute();
+                $queryPosto = "SELECT idPosto, numeroPosto FROM tposto WHERE idSettore = :idSettore AND disponibile = 1 LIMIT :quantita";
+                $stmtposto = $conn->prepare($queryPosto);
+                $stmtposto->bindParam(':idSettore', $settore['idSettore'], PDO::PARAM_INT);
+                $stmtposto->bindParam(':quantita', $quantita, PDO::PARAM_INT);
+                $stmtposto->execute();
 
-                $posti = $stmtPosto->fetchAll(PDO::FETCH_ASSOC);
+                $posti = $stmtposto->fetchAll(PDO::FETCH_ASSOC);
 
                 if ($posti && count($posti) >= $quantita) {
                     echo json_encode([

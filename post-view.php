@@ -22,9 +22,9 @@ $idEvento = $_GET['idEvento'];
 $sql = "SELECT 
     *
 FROM 
-    tEvento e
+    tevento e
 JOIN 
-    tLuogo l
+    tluogo l
 ON 
     e.idLuogo = l.idLuogo
 WHERE 
@@ -149,8 +149,8 @@ $result = mysqli_query($db_remoto, $sql);
                         </div>
                     </div>
                     <?php
-                    $sql = "SELECT * FROM tEvento e 
-                        JOIN tSettore l ON e.idEvento = l.idEvento 
+                    $sql = "SELECT * FROM tevento e 
+                        JOIN tsettore l ON e.idEvento = l.idEvento 
                         WHERE e.idEvento = $idEvento";
                     $result = mysqli_query($db_remoto, $sql);
 
