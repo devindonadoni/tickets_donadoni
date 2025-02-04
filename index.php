@@ -125,8 +125,8 @@ if (isset($_SESSION['user'])) {
         <!-- Carousel -->
         <div class="image-container swiper">
             <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <a href="ciao.php" class="card-link">
+                <div class="swiper-slide?idEvento=1">
+                    <a href="post-view.php" class="card-link">
                         <img id="background-image" src="images/concerto3.png" alt="Card Image">
                         <div class="text-overlay">
                             <p>Travis Scott</p>
@@ -135,7 +135,7 @@ if (isset($_SESSION['user'])) {
                     </a>
                 </div>
                 <div class="swiper-slide">
-                    <a href="ciao.php" class="card-link">
+                    <a href="post-view.php?idEvento=2" class="card-link">
                         <img id="background-image" src="images/concerto-sfera.png" alt="Card Image">
                         <div class="text-overlay">
                             <p>Sfera Ebbasta</p>
@@ -144,11 +144,11 @@ if (isset($_SESSION['user'])) {
                     </a>
                 </div>
                 <div class="swiper-slide">
-                    <a href="ciao.php" class="card-link">
-                        <img id="background-image" src="images/concerto3.png" alt="Card Image">
+                    <a href="post-view.php?idEvento=3" class="card-link">
+                        <img id="background-image" src="images/cold-play.png" alt="Card Image">
                         <div class="text-overlay">
-                            <p>Sfera Ebbasta</p>
-                            <h2>12 luglio 21:00</h2>
+                            <p>Cold Play</p>
+                            <h2>10 febbraio 21:00</h2>
                         </div>
                     </a>
                 </div>
@@ -161,40 +161,6 @@ if (isset($_SESSION['user'])) {
             <!-- Swiper Pagination -->
             <div class="image-pagination swiper-pagination"></div>
         </div>
-
-        <!-- categoria -->
-        <h1 class="label">Categorie:</h1>
-        <div class="category">
-            <div class="single-category">
-                <a href="category-view.php?categoria=partite">
-                    <h2>Sport e Partite</h2>
-                    <img src="images/stadium.png" alt="Stadium image">
-                    <div class="gradient-overlay"></div>
-                </a>
-            </div>
-            <div class="single-category">
-                <a href="category-view.php?categoria=teatro">
-                    <h2>Teatro</h2>
-                    <img src="images/theatre.png" alt="Theatre image">
-                    <div class="gradient-overlay"></div>
-                </a>
-            </div>
-            <div class="single-category">
-                <a href="category-view.php?categoria=tour">
-                    <h2>Tour</h2>
-                    <img src="images/tour.png" alt="Tour image">
-                    <div class="gradient-overlay"></div>
-                </a>
-            </div>
-            <div class="single-category">
-                <a href="category-view.php?categoria=partite">
-                    <h2>Concerti</h2>
-                    <img src="images/concerto-categ.png" alt="Concerts image">
-                    <div class="gradient-overlay"></div>
-                </a>
-            </div>
-        </div>
-
 
         <!-- filtri -->
         <h1 id="filtri-container" class="label">Cerca l'evento perfetto per te!</h1>
@@ -260,6 +226,62 @@ if (isset($_SESSION['user'])) {
         </a>
         <div class="partite-container swiper">
             <div id="slide-partite" class="swiper-wrapper">
+                <?php
+                // Connessione al database
+                // Controlla se la connessione ha avuto successo
+                if (!$db_remoto) {
+                    die("Connessione al database fallita: " . mysqli_connect_error());
+                }
+
+                // Ottieni e sanifica il parametro 'categoria' dalla query string
+                    $query = "
+                        SELECT 
+                            e.*, 
+                            l.citta,
+                            CASE 
+                                WHEN (
+                                    SELECT COUNT(*) 
+                                    FROM tsettore 
+                                    WHERE idEvento = e.idEvento
+                                ) = 0 THEN 1 
+                                WHEN (
+                                    SELECT SUM(postiTotali) 
+                                    FROM tsettore 
+                                    WHERE idEvento = e.idEvento
+                                ) = 0 THEN 1 
+                                ELSE 0
+                            END AS soldOut
+                        FROM tevento e 
+                        JOIN tluogo l ON e.idLuogo = l.idLuogo 
+                    WHERE e.categoria = 'partite'";
+
+                // Esegui la query
+                $result = mysqli_query($db_remoto, $query);
+
+                // Verifica se ci sono risultati
+                if ($result && mysqli_num_rows($result) > 0) {
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        $soldOutOverlay = $row['soldOut'] ? '<div class="result-gradient-overlay"><h1>SOLD OUT</h1></div>' : '';
+                        $formattedDate = strftime('%e %B %H:%M', strtotime($row['dataOraEvento']));
+                        echo "
+                            <div class='swiper-slide'>
+                                <a href='post-view.php?idEvento={$row['idEvento']}'>
+                                    <div class='card-result'>
+                                        $soldOutOverlay
+                                        <img id='background-image' src='{$row['pathFotoLocandina']}' alt='Card Image'>
+                                        <div class='didascalia'>
+                                            <h2>{$row['nomeEvento']}</h2>
+                                            <h3>{$row['citta']}</h3>
+                                            <h3>{$formattedDate}</h3>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>";
+                    }
+                } else {
+                    echo "<p>Nessun evento disponibile in questa categoria.</p>";
+                }
+                ?>
             </div>
             <div class="result-next swiper-button-next"></div>
             <div class="result-prev swiper-button-prev"></div>
@@ -272,8 +294,62 @@ if (isset($_SESSION['user'])) {
         <a href="category-view.php?categoria=concerto">
             <h1 class="label">Concerti:</h1>
         </a>
-        <div class="concerto-container swiper">
-            <div id="slide-concerto" class="swiper-wrapper">
+        <div class="partite-container swiper">
+            <div id="slide-partite" class="swiper-wrapper">
+            <?php
+                if (!$db_remoto) {
+                    die("Connessione al database fallita: " . mysqli_connect_error());
+                }
+
+                // Ottieni e sanifica il parametro 'categoria' dalla query string
+                    $query = "
+                        SELECT 
+                            e.*, 
+                            l.citta,
+                            CASE
+                                WHEN (
+                                    SELECT COUNT(*) 
+                                    FROM tsettore 
+                                    WHERE idEvento = e.idEvento
+                                ) = 0 THEN 1 
+                                WHEN (
+                                    SELECT SUM(postiTotali) 
+                                    FROM tsettore 
+                                    WHERE idEvento = e.idEvento
+                                ) = 0 THEN 1 
+                                ELSE 0
+                            END AS soldOut
+                        FROM tevento e 
+                        JOIN tluogo l ON e.idLuogo = l.idLuogo 
+                    WHERE e.categoria = 'concerto'";
+
+                // Esegui la query
+                $result = mysqli_query($db_remoto, $query);
+
+                // Verifica se ci sono risultati
+                if ($result && mysqli_num_rows($result) > 0) {
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        $soldOutOverlay = $row['soldOut'] ? '<div class="result-gradient-overlay"><h1>SOLD OUT</h1></div>' : '';
+                        $formattedDate = strftime('%e %B %H:%M', strtotime($row['dataOraEvento']));
+                        echo "
+                            <div class='swiper-slide'>
+                                <a href='post-view.php?idEvento={$row['idEvento']}'>
+                                    <div class='card-result'>
+                                        $soldOutOverlay
+                                        <img id='background-image' src='{$row['pathFotoLocandina']}' alt='Card Image'>
+                                        <div class='didascalia'>
+                                            <h2>{$row['nomeEvento']}</h2>
+                                            <h3>{$row['citta']}</h3>
+                                            <h3>{$formattedDate}</h3>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>";
+                    }
+                } else {
+                    echo "<p>Nessun evento disponibile in questa categoria.</p>";
+                }
+                ?>
             </div>
             <div class="result-next swiper-button-next"></div>
             <div class="result-prev swiper-button-prev"></div>
@@ -288,6 +364,62 @@ if (isset($_SESSION['user'])) {
         </a>
         <div class="tour-container swiper">
             <div id="slide-tour" class="swiper-wrapper">
+            <?php
+                // Connessione al database
+                // Controlla se la connessione ha avuto successo
+                if (!$db_remoto) {
+                    die("Connessione al database fallita: " . mysqli_connect_error());
+                }
+
+                // Ottieni e sanifica il parametro 'categoria' dalla query string
+                    $query = "
+                        SELECT 
+                            e.*, 
+                            l.citta,
+                            CASE 
+                                WHEN (
+                                    SELECT COUNT(*) 
+                                    FROM tsettore 
+                                    WHERE idEvento = e.idEvento
+                                ) = 0 THEN 1 
+                                WHEN (
+                                    SELECT SUM(postiTotali) 
+                                    FROM tsettore 
+                                    WHERE idEvento = e.idEvento
+                                ) = 0 THEN 1 
+                                ELSE 0
+                            END AS soldOut
+                        FROM tevento e 
+                        JOIN tluogo l ON e.idLuogo = l.idLuogo 
+                    WHERE e.categoria = 'tour'";
+
+                // Esegui la query
+                $result = mysqli_query($db_remoto, $query);
+
+                // Verifica se ci sono risultati
+                if ($result && mysqli_num_rows($result) > 0) {
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        $soldOutOverlay = $row['soldOut'] ? '<div class="result-gradient-overlay"><h1>SOLD OUT</h1></div>' : '';
+                        $formattedDate = strftime('%e %B %H:%M', strtotime($row['dataOraEvento']));
+                        echo "
+                            <div class='swiper-slide'>
+                                <a href='post-view.php?idEvento={$row['idEvento']}'>
+                                    <div class='card-result'>
+                                        $soldOutOverlay
+                                        <img id='background-image' src='{$row['pathFotoLocandina']}' alt='Card Image'>
+                                        <div class='didascalia'>
+                                            <h2>{$row['nomeEvento']}</h2>
+                                            <h3>{$row['citta']}</h3>
+                                            <h3>{$formattedDate}</h3>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>";
+                    }
+                } else {
+                    echo "<p>Nessun evento disponibile in questa categoria.</p>";
+                }
+                ?>
             </div>
             <div class="result-next swiper-button-next"></div>
             <div class="result-prev swiper-button-prev"></div>
@@ -303,12 +435,101 @@ if (isset($_SESSION['user'])) {
         </a>
         <div class="teatro-container swiper">
             <div id="slide-teatro" class="swiper-wrapper">
+            <?php
+                // Connessione al database
+                // Controlla se la connessione ha avuto successo
+                if (!$db_remoto) {
+                    die("Connessione al database fallita: " . mysqli_connect_error());
+                }
+
+                // Ottieni e sanifica il parametro 'categoria' dalla query string
+                    $query = "
+                        SELECT 
+                            e.*, 
+                            l.citta,
+                            CASE 
+                                WHEN (
+                                    SELECT COUNT(*) 
+                                    FROM tsettore 
+                                    WHERE idEvento = e.idEvento
+                                ) = 0 THEN 1 
+                                WHEN (
+                                    SELECT SUM(postiTotali) 
+                                    FROM tsettore 
+                                    WHERE idEvento = e.idEvento
+                                ) = 0 THEN 1 
+                                ELSE 0
+                            END AS soldOut
+                        FROM tevento e 
+                        JOIN tluogo l ON e.idLuogo = l.idLuogo 
+                    WHERE e.categoria = 'teatro'";
+
+                // Esegui la query
+                $result = mysqli_query($db_remoto, $query);
+
+                // Verifica se ci sono risultati
+                if ($result && mysqli_num_rows($result) > 0) {
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        $soldOutOverlay = $row['soldOut'] ? '<div class="result-gradient-overlay"><h1>SOLD OUT</h1></div>' : '';
+                        $formattedDate = strftime('%e %B %H:%M', strtotime($row['dataOraEvento']));
+                        echo "
+                            <div class='swiper-slide'>
+                                <a href='post-view.php?idEvento={$row['idEvento']}'>
+                                    <div class='card-result'>
+                                        $soldOutOverlay
+                                        <img id='background-image' src='{$row['pathFotoLocandina']}' alt='Card Image'>
+                                        <div class='didascalia'>
+                                            <h2>{$row['nomeEvento']}</h2>
+                                            <h3>{$row['citta']}</h3>
+                                            <h3>{$formattedDate}</h3>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>";
+                    }
+                } else {
+                    echo "<p>Nessun evento disponibile in questa categoria.</p>";
+                }
+                ?>
             </div>
             <div class="result-next swiper-button-next"></div>
             <div class="result-prev swiper-button-prev"></div>
 
             <!-- Swiper Pagination -->
             <div class="result-pagination swiper-pagination"></div>
+        </div>
+
+        <!-- categoria -->
+        <h1 class="label">Categorie:</h1>
+        <div class="category">
+            <div class="single-category">
+                <a href="category-view.php?categoria=partite">
+                    <h2>Sport e Partite</h2>
+                    <img src="images/stadium.png" alt="Stadium image">
+                    <div class="gradient-overlay"></div>
+                </a>
+            </div>
+            <div class="single-category">
+                <a href="category-view.php?categoria=teatro">
+                    <h2>Teatro</h2>
+                    <img src="images/theatre.png" alt="Theatre image">
+                    <div class="gradient-overlay"></div>
+                </a>
+            </div>
+            <div class="single-category">
+                <a href="category-view.php?categoria=tour">
+                    <h2>Tour</h2>
+                    <img src="images/tour.png" alt="Tour image">
+                    <div class="gradient-overlay"></div>
+                </a>
+            </div>
+            <div class="single-category">
+                <a href="category-view.php?categoria=partite">
+                    <h2>Concerti</h2>
+                    <img src="images/concerto-categ.png" alt="Concerts image">
+                    <div class="gradient-overlay"></div>
+                </a>
+            </div>
         </div>
 
 
@@ -374,22 +595,13 @@ if (isset($_SESSION['user'])) {
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="script/load-events.js"></script>
+    <!-- <script src="script/load-events.js"></script> -->
     <script src="script/script.js"></script>
     <script src="script/search.js"></script>
 </body>
 
-
 <script src="script/profile-menu.js"></script>
 <script>
-
-
-    document.getElementById("scrollToFilters").addEventListener("click", function (event) {
-        event.preventDefault(); // Evita il comportamento predefinito del link
-        const filtersSection = document.getElementById("filtri-container");
-        filtersSection.scrollIntoView({ behavior: "smooth" });
-    });
-
 
     var navlinks = document.getElementById("navlinks");
     var fa_times_circle = document.getElementById("fa-times-circle");

@@ -134,7 +134,7 @@ if (isset($_SESSION['user'])) {
           <a href="#item3">Cancellate</a>
         </li>
         <li class="tab-item">
-          <a href="#item4">Scadute</a>
+          <a href="#item4">In elaborazione</a>
         </li>
         <div class="search-item">
           <a href=""><i class="fa-solid fa-magnifying-glass"></i></a>

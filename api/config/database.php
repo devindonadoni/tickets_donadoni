@@ -1,9 +1,9 @@
 <?php
 class Database {
     private $host = "localhost";
-    private $db_name = "prenotazioni_donadoni";
-    private $username = "quintae";
-    private $password = "Qu!nta";
+    private $db_name = "tickets_donadoni";
+    private $username = "root";
+    private $password = "";
     public $conn;
 
     public function getConnection() {

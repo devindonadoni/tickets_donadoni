@@ -799,3 +799,112 @@ input[type="radio"]:hover {
     align-items: center;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Effetto ombra */
 }
+
+
+
+
+.profile-icon {
+    position: relative;
+    display: inline-block;
+}
+
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%; 
+    margin-top: 10px;
+    padding: 10px 0;
+    right: -2rem;
+    background-color: #E7E7E7;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: auto;
+    min-width: 200px;
+}
+
+.name-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    padding: 0;
+    font-size: 13px;
+    overflow: hidden;
+}
+
+.name-container h1{
+    color: #4680EB;
+    margin-bottom: 0;
+}
+
+.name-container p{
+    margin: 1px 5px;
+    opacity: 50%;
+}
+
+.dropmenu-element {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    gap: 20px;
+    background-color: #E7E7E7;
+    color: #000000;
+    opacity: 80%;
+    padding-left: 10px;
+    border-top: 2px solid rgba(0, 0, 0, 0.300);
+    font-size: 13px;
+    margin: 0 10px;
+}
+
+.dropmenu-element i{
+    opacity: 50%;
+}
+
+.dropmenu-element-signout{
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    gap: 20px;
+    color: #000000;
+    opacity: 80%;
+    padding-left: 10px;
+    border-top: 2px solid rgba(0, 0, 0, 0.300);
+    font-size: 14px;
+    margin: 0 10px;
+    color: #730505;
+    font-weight: bold;
+    transition: 1s ease-in-out;
+}
+
+
+/* Mostra il dropdown menu quando si passa il mouse sull'icona del profilo */
+.profile-icon:hover .dropdown-menu {
+    display: block;
+}
+
+
+.dropmenu-element:hover{
+    color: #4680EB;
+    font-weight: bold;
+    opacity: 100%;
+}
+
+.dropdown-menu::before {
+    content: "";
+    position: absolute;
+    top: -8px; /* Posiziona il triangolo sopra il menu */
+    right: 2rem; /* Allinea il triangolo al profilo */
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #E7E7E7; /* Colore dello sfondo del menu */
+}

@@ -76,7 +76,50 @@ $result = mysqli_query($db_remoto, $sql);
                         </li>
                         <?php
                         if ($utente != "") {
-                            echo '<li><a href="profilo.php"><i class="fa-solid fa-user"></i></a></li>';
+                            $nomeUtente = "";
+                            $emailUtente = "";
+                            $sqlNome = "SELECT * FROM tutente WHERE idUtente = '$idUtente'";
+                            $resultNome = mysqli_query($db_remoto, $sqlNome);
+
+
+                            if (mysqli_num_rows($resultNome) > 0) {
+                                while ($row = mysqli_fetch_assoc($resultNome)) {
+                                    $nomeUtente = $row['nome'] . " " . $row["cognome"];
+                                    $emailUtente = $row['email'];
+                                }
+                            }
+
+                            echo '<li class="profile-icon">
+                                <a class="profile-link">
+                                    <i class="fa-solid fa-user"></i>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <div class="name-container">
+                                        <h1>' . $nomeUtente . '</h1>
+                                        <p>' . $emailUtente . '</p>
+                                    </div>
+                                    <div class="dropmenu-element" onclick="rindirizza(\'profilo\')">
+                                        <i class="fa-solid fa-user"></i>
+                                        <p>Profilo</p>
+                                    </div>
+                                    <div class="dropmenu-element" onclick="rindirizza(\'Biglietti\')">
+                                        <i class="fa-solid fa-ticket"></i>
+                                        <p>Biglietti</p>
+                                    </div>
+                                    <div class="dropmenu-element" onclick="rindirizza(\'Impostazioni\')">
+                                        <i class="fa-solid fa-gear"></i>    
+                                        <p>Impostazioni</p>
+                                    </div>
+                                    <div class="dropmenu-element" onclick="rindirizza(\'Help\')">
+                                        <i class="fa-solid fa-comments"></i>
+                                        <p>Help</p>
+                                    </div>
+                                    <div class="dropmenu-element-signout" onclick="logout()">
+                                        <i class="fa-solid fa-sign-out"></i>
+                                        <p>SIGN OUT</p>
+                                    </div>
+                                </div>
+                            </li>';
                         } else {
                             echo '<li><a href="login.php"><i class="fa-solid fa-user"></i></a></li>';
                         }
@@ -264,7 +307,7 @@ $result = mysqli_query($db_remoto, $sql);
 
 </body>
 
-
+<script src="script/profile-menu.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const ticketSelector = document.querySelector('.ticket-selector');
