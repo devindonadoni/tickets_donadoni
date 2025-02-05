@@ -23,8 +23,8 @@ $(document).ready(function () {
 
                 let html = filteredData.length === 0
                     ? `<div class="no-booking">
-                            <p>Nessuna prenotazione disponibile.</p>
-                            <a href="shop.html" class="shop-link">Torna allo shopping</a>
+                    <p>Nessuna prenotazione disponibile.</p>
+                    <a href="shop.html" class="shop-link">Torna allo shopping</a>
                     </div>`
                                     : filteredData.map(prenotazione => `
                         <div class="event-info">
@@ -36,10 +36,13 @@ $(document).ready(function () {
                                 <p style="color: white; background-color: ${getColor(prenotazione.statoPrenotazione)};">
                                     €${prenotazione.prezzo}, ${prenotazione.statoPrenotazione}
                                 </p>
-                                <i class="fa-solid fa-download"></i>
+                                ${prenotazione.statoPrenotazione === 'confermata'
+                                            ? `<a target="_blank" href="generate-pdf.php?idPrenotazione=${prenotazione.idPrenotazione}"><i class="fa-solid fa-download"></i></a>`
+                                            : ''}
                             </div>
                         </div>
-                    `).join('');
+                `).join('');
+
 
 
                 // Inserisce i dati nel tab corretto
@@ -85,9 +88,9 @@ $(document).ready(function () {
         'luogo': { campo: 'citta', ordine: 'asc' },
         'data': { campo: 'dataOraEvento', ordine: 'asc' },
         'posto': { campo: 'numeroPosto', ordine: 'asc' },
-        'prezzo': { campo: 'prezzo', ordine: 'asc' } 
+        'prezzo': { campo: 'prezzo', ordine: 'asc' }
     };
-    
+
 
     $(".single-filter").click(function () {
         let filtroSelezionato = $(this).text().trim().toLowerCase(); // "Evento" → "evento"

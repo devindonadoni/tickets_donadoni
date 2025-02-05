@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/gutenberg-css@0.6">
+    <style>
+        
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.main-container {
+    max-width: 1500px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.upper-container {
+    margin: 10px 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px dotted  rgba(0, 0, 0, 0.733);
+}
+
+
+.header {
+    background-color: #06235a;
+    height: auto;
+    text-align: left;
+}
+
+.header img {
+    margin: 10px 0 0 20px;
+    width: 100px;
+}
+
+.ticket-body {
+    padding: 20px 5%;
+    background-image: linear-gradient(to bottom right, rgba(171, 171, 171, 0.853), rgba(114, 114, 114, 0.978)), url(../background-image2.png);
+    background-position: center;
+    background-size: cover;
+}
+
+.ticket-body table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.ticket-body td {
+    padding: 20px;
+    vertical-align: middle;
+}
+
+.ticket-body img {
+    width: 100px;
+}
+
+.info-event {
+    text-align: left;
+}
+
+.info-event h1 {
+    font-size: 30px;
+}
+
+.info-event p {
+    margin: 0;
+    padding: 0;
+}
+
+.price {
+    padding: 20px 0;
+}
+
+.price p {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.locandina img {
+    object-fit: cover;
+    height: auto;
+    width: 50%;
+}
+
+.bar-code img {
+    width: 150px;
+}
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="upper-container">
+            <div class="header">
+                <img src="images/logo-removed1.png" alt="Logo">
+            </div>
+            <div class="ticket-body">
+                <table>
+                    <tr>
+                        <td class="qr-code">
+                            <img src="images/qrcode.png" alt="QR Code">
+                        </td>
+                        <td class="info-event">
+                            <h1>{{ nomeEvento }}</h1>
+                            <p>{{ locazione }} | {{ citta }}</p>
+                            <p>{{ data }} | {{ ora }}</p>
+                            <h1>{{ nomeSettore }} | {{ numeroPosto }}</h1>
+                            <div class="price">
+                                <p>Prezzo: €{{ prezzo }}</p>
+                                <p>Prev: €{{ prev }}</p>
+                                <p>Totale: €{{ prezzoTotale }}</p>
+                            </div>
+                        </td>
+                        <td class="bar-code">
+                            <img src="images/bar-code.png" alt="Bar Code">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
