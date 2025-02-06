@@ -13,7 +13,7 @@ $pdo = $db->getConnection();
 $idPrenotazione = isset($_GET['idPrenotazione']) ? intval($_GET['idPrenotazione']) : 0;
 
 // Query al database per ottenere i dettagli della prenotazione
-$stmt = $pdo->prepare("SELECT e.nomeEvento, e.dataOraEvento, l.citta, l.locazione, p.prezzo, s.nomeSettore, t.numeroPosto
+$stmt = $pdo->prepare("SELECT e.nomeEvento, e.dataOraEvento, l.citta, l.locazione, p.prezzo, s.nomeSettore, t.numeroPosto, p.qr_image_path
                                 FROM tprenotazione p
                                 JOIN tEvento e ON p.idEvento = e.idEvento
                                 JOIN tluogo l ON e.idLuogo = l.idLuogo
@@ -57,16 +57,14 @@ $html = file_get_contents("template.html");
 $html = str_replace([
     "{{ nomeEvento }}", "{{ citta }}", "{{ locazione }}",
     "{{ dataOraEvento }}", "{{ prezzo }}", "{{ prev }}", "{{ prezzoTotale }}", "{{ nomeSettore }}", "{{ numeroPosto }}",
-    "{{ data }}", "{{ ora }}"
+    "{{ data }}", "{{ ora }}", "{{ qr-path }}"
 ], [
     $prenotazione['nomeEvento'], $prenotazione['citta'], $prenotazione['locazione'],
     $prenotazione['dataOraEvento'], number_format($prenotazione['prezzo'], 2), number_format($prev, 2), 
-    number_format($prezzoTotale, 2), $prenotazione['nomeSettore'], ($prenotazione['numeroPosto']) ? $prenotazione['numeroPosto'] : "", $dataFormattata, $oraFormattata
+    number_format($prezzoTotale, 2), $prenotazione['nomeSettore'], ($prenotazione['numeroPosto']) ? $prenotazione['numeroPosto'] : "", $dataFormattata, $oraFormattata, $prenotazione['qr_image_path']
 ], $html);
 
 $dompdf->loadHtml($html);
 $dompdf->render();
-$dompdf->stream("biglietto.pdf", ["Attachment" => 0]);
-
-
+$dompdf->stream($string = preg_replace('/\s+/', '_', $prenotazione['nomeEvento'])."_Prenotazione_".$idPrenotazione.".pdf", ["Attachment" => false]);
 ?>

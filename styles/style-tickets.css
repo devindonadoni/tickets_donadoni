@@ -463,6 +463,7 @@ a {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  margin-right: 5px;
 }
 
 .total p {
@@ -471,8 +472,17 @@ a {
 }
 
 .total i {
+  padding: 10px;
   color: #4680EB;
   cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.total i:hover{
+  border-radius: 30px;
+  padding: 10px;
+  transform: scale(1.5);
+  background-color: rgb(206, 206, 206);
 }
 
 
@@ -492,3 +502,4 @@ a {
 .rotated {
   transform: rotate(180deg);
 }
+

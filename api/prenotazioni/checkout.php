@@ -81,6 +81,12 @@ foreach ($prenotazioni as $carrello) {
     ";
     $stmt = $conn->prepare($sql);
     $stmt->execute(['idPrenotazione' => $idPrenotazione]);
+
+    // Generare il QR Code chiamando il file genera_qr.php
+    $qrUrl = "http://localhost/TICKETS/genera_qr.php?idPrenotazione=" . urlencode($idPrenotazione);
+
+    // Esegui una richiesta HTTP per generare il QR
+    file_get_contents($qrUrl);
 }
 
 echo json_encode([
