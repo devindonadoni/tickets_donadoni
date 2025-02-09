@@ -125,12 +125,12 @@ if (isset($_SESSION['user'])) {
         <!-- Carousel -->
         <div class="image-container swiper">
             <div class="swiper-wrapper">
-                <div class="swiper-slide?idEvento=1">
-                    <a href="post-view.php" class="card-link">
+            <div class="swiper-slide">
+                    <a href="post-view.php?idEvento=3" class="card-link">
                         <img id="background-image" src="images/concerto3.png" alt="Card Image">
                         <div class="text-overlay">
                             <p>Travis Scott</p>
-                            <h2>22 luglio 22:00</h2>
+                            <h2>20 marzo 21:00</h2>
                         </div>
                     </a>
                 </div>
@@ -140,15 +140,6 @@ if (isset($_SESSION['user'])) {
                         <div class="text-overlay">
                             <p>Sfera Ebbasta</p>
                             <h2>12 luglio 21:00</h2>
-                        </div>
-                    </a>
-                </div>
-                <div class="swiper-slide">
-                    <a href="post-view.php?idEvento=3" class="card-link">
-                        <img id="background-image" src="images/cold-play.png" alt="Card Image">
-                        <div class="text-overlay">
-                            <p>Cold Play</p>
-                            <h2>10 febbraio 21:00</h2>
                         </div>
                     </a>
                 </div>
@@ -173,10 +164,10 @@ if (isset($_SESSION['user'])) {
                 <h1>Categoria</h1>
                 <select id="categoria-select" class="select-filter">
                     <option value="">Scegli la categoria...</option>
-                    <option value="concerto">Concerto</option>
-                    <option value="partite">partite</option>
-                    <option value="teatro">teatro</option>
-                    <option value="tour">tour</option>
+                    <option value="concerto">Concerti</option>
+                    <option value="partite">Partite</option>
+                    <option value="teatro">Teatro</option>
+                    <option value="tour">Tour</option>
                 </select>
             </div>
             <div class="luogo">
@@ -524,7 +515,7 @@ if (isset($_SESSION['user'])) {
                 </a>
             </div>
             <div class="single-category">
-                <a href="category-view.php?categoria=partite">
+                <a href="category-view.php?categoria=concerto">
                     <h2>Concerti</h2>
                     <img src="images/concerto-categ.png" alt="Concerts image">
                     <div class="gradient-overlay"></div>
